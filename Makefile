@@ -4,8 +4,9 @@ TARGET = tiny
 SRCS = $(wildcard src/*.cpp)
 OBJS = $(patsubst src/%.cpp, build/%.o, $(SRCS))
 
+DESTDIR :=
 PREFIX := /usr
-BIN := $(PREFIX)/bin
+BIN := $(DESTDIR)/$(PREFIX)/bin
 
 .PHONY: all
 all: build build/$(TARGET)
