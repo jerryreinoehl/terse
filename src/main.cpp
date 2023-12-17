@@ -36,11 +36,13 @@ int main(int argc, char **argv) {
   std::vector<std::string> args;
   for (int i = 1; i < argc; i++)
     args.push_back(argv[i]);
+
   std::vector<std::string> converted = translate(args, map);
+  int rc = execute(converted);
+  if (rc != 0)
+    perror("Error");
 
-  execute(converted);
-
-  return 0;
+  return rc;
 }
 
 std::vector<std::string> translate(const std::vector<std::string>& args, const TokenMap& map) {
@@ -64,6 +66,11 @@ std::vector<std::string> translate(const std::vector<std::string>& args, const T
 }
 
 int execute(const std::vector<std::string>& args) {
+  if (args.size() == 0) {
+    errno = EINVAL;
+    return -EINVAL;
+  }
+
   const char **argv = new const char*[args.size() + 1];
 
   for (size_t i = 0; i < args.size(); i++)
