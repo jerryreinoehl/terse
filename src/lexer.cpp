@@ -3,7 +3,7 @@
 #include <cctype>
 
 Lexer::Lexer(const char *buf, size_t size)
-  : buf_{buf}, cur_{buf}, end_{buf_ + size}, tok_begin_{}, tok_end_{}
+  : buf_{buf}, cur_{buf}, end_{buf_ + size}
 {}
 
 Token Lexer::next() {
@@ -15,7 +15,7 @@ Token Lexer::next() {
     return {Token::Type::END};
   }
 
-  seek_space();
+  seek();
 
   if (cur_ >= end_) {
     return {Token::Type::STOP};
@@ -38,14 +38,35 @@ Token Lexer::next() {
   } else if (value == "}") {
     return {Token::Type::MAP_END};
   } else {
-    if (cur_ < end_ && *cur_ == '\n')
+    skip_space();
+    if (*cur_ == '\n' || *cur_ == COMMENT)
       eos_ = true;
+
     return {Token::Type::STRING, value};
   }
 }
 
-void Lexer::seek_space() {
-  while (cur_ <= end_ && isspace(*cur_)) {
+void Lexer::skip_whitespace() {
+  while (cur_ <= end_ && isspace(*cur_))
     ++cur_;
+}
+
+void Lexer::skip_space() {
+  while (cur_ <= end_ && *cur_ == ' ')
+    ++cur_;
+}
+
+void Lexer::skip_line() {
+  while (cur_ <= end_ && *cur_ != '\n')
+    ++cur_;
+}
+
+void Lexer::seek() {
+  while (true) {
+    skip_whitespace();
+    if (cur_ <= end_ && *cur_ == COMMENT) {
+      skip_line();
+    } else
+      break;
   }
 }
