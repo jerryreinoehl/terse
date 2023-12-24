@@ -1,7 +1,10 @@
+NAME = terse
+
 CC := c++
 CFLAGS := -Wall -Wextra -Werror -Weffc++
-TARGET = tiny
+TARGET = trs
 SRCS = $(wildcard src/*.cpp)
+HDRS = $(wildcard src/*.h)
 OBJS = $(patsubst src/%.cpp, build/%.o, $(SRCS))
 
 DESTDIR :=
@@ -9,7 +12,7 @@ PREFIX := /usr
 BIN := $(DESTDIR)/$(PREFIX)/bin
 
 VERSION := 0.0.1
-RELEASE = $(TARGET)-$(VERSION).tar.gz
+RELEASE = $(NAME)-$(VERSION).tar.gz
 
 .PHONY: all
 all: build build/$(TARGET)
@@ -17,7 +20,7 @@ all: build build/$(TARGET)
 build/$(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
-build/%.o: src/%.cpp
+build/%.o: src/%.cpp $(HDRS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 build:
@@ -32,7 +35,7 @@ install: build/$(TARGET)
 .PHONY: release
 release: $(RELEASE)
 $(RELEASE):
-	tar -czvf $@ --transform 's|^|$(TARGET)-$(VERSION)/|' src/ Makefile
+	tar -czvf $@ --transform 's|^|$(NAME)-$(VERSION)/|' src/ Makefile
 
 .PHONY: pkg
 pkg: release

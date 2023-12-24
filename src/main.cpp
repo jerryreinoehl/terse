@@ -16,7 +16,7 @@ namespace fs = std::filesystem;
 
 int main(int argc, char **argv) {
   fs::path config{std::getenv("HOME")};
-  config += fs::path{"/.config/tiny/config"};
+  config += fs::path{"/.config/terse/config"};
 
   std::ifstream in{config, std::ios::ate};
   std::streampos size = in.tellg();
