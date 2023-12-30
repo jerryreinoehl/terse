@@ -6,6 +6,7 @@ class Lexer {
   public:
     Lexer(const char *buf, size_t size);
 
+    // Return next `Token` in buffer.
     Token next();
 
   private:
