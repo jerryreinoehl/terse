@@ -41,7 +41,12 @@ int main(int argc, char **argv) {
   if (args.verbose())
     std::cout << "\e[1;35m==> Executing: " << converted << "\e[0m\n";
 
-  int rc = execute(converted);
+  int rc;
+  if (args.dry_run())
+    rc = 0;
+  else
+    rc = execute(converted);
+
   if (rc != 0)
     perror("Error");
 
