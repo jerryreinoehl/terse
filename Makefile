@@ -1,7 +1,7 @@
 NAME = terse
 
 CC := c++
-CFLAGS := -Wall -Wextra -Werror -Weffc++
+CFLAGS := -Wall -Wextra -Werror -Weffc++ -O2
 TARGET = trs
 SRCS = $(wildcard src/*.cpp)
 HDRS = $(wildcard src/*.h)
