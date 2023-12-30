@@ -1,3 +1,4 @@
+#include "args.h"
 #include "lexer.h"
 #include "main.h"
 #include "parser.h"
@@ -15,6 +16,8 @@
 namespace fs = std::filesystem;
 
 int main(int argc, char **argv) {
+  Args args{argc, argv};
+
   fs::path config{std::getenv("HOME")};
   config += fs::path{"/.config/terse/terse.conf"};
 
@@ -33,11 +36,11 @@ int main(int argc, char **argv) {
   Parser parser{buf.get(), static_cast<size_t>(size)};
   TokenMap map = parser.parse().value_or(TokenMap{});
 
-  std::vector<std::string> args;
-  for (int i = 1; i < argc; i++)
-    args.push_back(argv[i]);
+  std::vector<std::string> converted = translate(args.command(), map);
 
-  std::vector<std::string> converted = translate(args, map);
+  if (args.verbose())
+    std::cout << "\e[1;35m==> Executing: " << converted << "\e[0m\n";
+
   int rc = execute(converted);
   if (rc != 0)
     perror("Error");
