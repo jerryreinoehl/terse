@@ -32,6 +32,10 @@ install: build/$(TARGET)
 	strip build/$(TARGET)
 	install -m 0755 build/$(TARGET) $(BIN)/$(TARGET)
 
+.PHONY: uninstall
+uninstall:
+	rm -rf $(BIN)/$(TARGET)
+
 .PHONY: release
 release: $(RELEASE)
 $(RELEASE):
