@@ -64,9 +64,9 @@ void Lexer::skip_line() {
 void Lexer::seek() {
   while (true) {
     skip_whitespace();
-    if (cur_ <= end_ && *cur_ == COMMENT) {
+    if (cur_ <= end_ && *cur_ == COMMENT)
       skip_line();
-    } else
+    else
       break;
   }
 }
