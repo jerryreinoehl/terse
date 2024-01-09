@@ -19,7 +19,7 @@ class Lexer {
     const char *tok_begin_{}; // Beginning position of token in buffer.
     const char *tok_end_{};   // End position of token in buffer.
 
-    bool eos_ = false;        // Indicates end of statement.
+    bool eos_{false};         // Indicates end of statement.
 
     // Move `cur_` to next non-whitespace character.
     void skip_whitespace();

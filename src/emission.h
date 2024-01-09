@@ -21,6 +21,6 @@ class Emission {
     void set_map(const TokenMap& map);
 
   private:
-    std::vector<std::string> tokens_;
-    std::optional<TokenMap> map_;
+    std::vector<std::string> tokens_{};
+    std::optional<TokenMap> map_{};
 };

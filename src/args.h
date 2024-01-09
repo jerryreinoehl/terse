@@ -13,6 +13,6 @@ class Args {
 
   private:
     std::vector<std::string> command_{};
-    bool dry_run_ = false;
-    bool verbose_ = false;
+    bool dry_run_{false};
+    bool verbose_{false};
 };

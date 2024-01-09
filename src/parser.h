@@ -13,8 +13,8 @@ class Parser {
 
   private:
     Lexer lexer_;
-    Token lookahead_tok_;
-    bool lookahead_;
+    Token lookahead_tok_{};
+    bool lookahead_{};
 
     Token next();
     void put_back(const Token& token);

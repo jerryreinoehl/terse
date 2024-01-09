@@ -2,9 +2,7 @@
 
 #include <stack>
 
-Parser::Parser(const char *buf, size_t size)
-  : lexer_{buf, size}, lookahead_tok_{}, lookahead_{}
-{}
+Parser::Parser(const char *buf, size_t size) : lexer_{buf, size} {}
 
 std::optional<TokenMap> Parser::parse() {
   std::stack<TokenMap> maps;

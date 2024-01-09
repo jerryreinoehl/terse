@@ -1,8 +1,8 @@
 #include "emission.h"
 
-Emission::Emission() : tokens_{}, map_{} {}
+Emission::Emission() {}
 
-Emission::Emission(const std::vector<std::string>& tokens) : tokens_{tokens}, map_{} {}
+Emission::Emission(const std::vector<std::string>& tokens) : tokens_{tokens} {}
 
 std::vector<std::string> Emission::tokens() const noexcept {
   return tokens_;

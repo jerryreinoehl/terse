@@ -2,7 +2,7 @@
 
 Args::Args(int argc, char **argv) {
   std::string arg;
-  bool end_of_opts = false;
+  bool end_of_opts{false};
 
   for (char **it = &argv[1], **end = &argv[argc]; it != end; ++it) {
     arg = std::string{*it};
