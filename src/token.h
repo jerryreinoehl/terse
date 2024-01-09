@@ -2,12 +2,13 @@
 
 #include <optional>
 #include <string>
+#include <string_view>
 
 class Token {
   public:
     enum class Type { NONE, STRING, MAPS, MAP_BEGIN, MAP_END, END, STOP };
 
-    Token(Type type = Type::NONE, std::string value = {});
+    Token(Type type = Type::NONE, std::string_view value = {});
 
     Type type() const noexcept;
     std::string value() const noexcept;

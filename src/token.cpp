@@ -1,6 +1,6 @@
 #include "token.h"
 
-Token::Token(Type type, std::string value) : type_{type}, value_{value} {}
+Token::Token(Type type, std::string_view value) : type_{type}, value_{value} {}
 
 Token::Type Token::type() const noexcept {
   return type_;
