@@ -63,8 +63,8 @@ std::vector<std::string> translate(const std::vector<std::string>& args, const T
     if (it != tm.end()) {
       for (const auto& token : it->second.tokens()) {
         converted.push_back(token);
-        tm = it->second.map().value_or(tm);
       }
+      tm = it->second.map().value_or(tm);
     } else {
       converted.push_back(arg);
     }
