@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "terse/parser.h"
 
 #include <stack>
 

@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "terse/lexer.h"
 
 #include <cctype>
 

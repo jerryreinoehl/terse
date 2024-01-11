@@ -1,4 +1,4 @@
-#include "emission.h"
+#include "terse/emission.h"
 
 Emission::Emission() {}
 

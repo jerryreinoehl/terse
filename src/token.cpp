@@ -1,4 +1,4 @@
-#include "token.h"
+#include "terse/token.h"
 
 Token::Token(Type type, std::string_view value) : type_{type}, value_{value} {}
 

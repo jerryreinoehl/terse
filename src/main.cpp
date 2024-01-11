@@ -1,8 +1,8 @@
-#include "args.h"
-#include "lexer.h"
-#include "main.h"
-#include "parser.h"
-#include "token.h"
+#include "terse/args.h"
+#include "terse/lexer.h"
+#include "terse/main.h"
+#include "terse/parser.h"
+#include "terse/token.h"
 
 #include <filesystem>
 #include <fstream>

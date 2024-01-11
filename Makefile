@@ -2,9 +2,10 @@ NAME = terse
 
 CC := c++
 CFLAGS := -Wall -Wextra -Werror -Weffc++ -O2
+INC = -Iinclude
 TARGET = trs
 SRCS = $(wildcard src/*.cpp)
-HDRS = $(wildcard src/*.h)
+HDRS = $(wildcard include/**/*.h)
 OBJS = $(patsubst src/%.cpp, build/%.o, $(SRCS))
 
 DESTDIR :=
@@ -18,10 +19,10 @@ RELEASE = $(NAME)-$(VERSION).tar.gz
 all: build build/$(TARGET)
 
 build/$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(INC) -o $@ $^
 
 build/%.o: src/%.cpp $(HDRS)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 build:
 	mkdir -p ./build
