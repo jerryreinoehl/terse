@@ -49,10 +49,14 @@ std::optional<TokenMap> Parser::parse() {
         break;
 
       case Token::Type::MAP_END:
-        maps.top()[emissions.top()].set_map(map);
-        map = maps.top();
-        maps.pop();
-        emissions.pop();
+        while (tok.type() == Token::Type::MAP_END) {
+          maps.top()[emissions.top()].set_map(map);
+          map = maps.top();
+          maps.pop();
+          emissions.pop();
+          tok = next();
+        }
+        put_back(tok);
         break;
 
       default:
