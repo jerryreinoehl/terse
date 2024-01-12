@@ -11,11 +11,11 @@ std::vector<std::string> Emission::tokens() const noexcept {
   return tokens_;
 }
 
-void terse::Emission::set_tokens(const std::vector<std::string>& tokens) {
+void Emission::set_tokens(const std::vector<std::string>& tokens) {
   tokens_ = tokens;
 }
 
-std::optional<TokenMap> terse::Emission::map() const noexcept {
+std::optional<TokenMap> Emission::map() const noexcept {
   return map_;
 }
 
