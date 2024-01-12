@@ -1,6 +1,7 @@
-#include "terse/args.h"
+#include "main.h"
+
+#include "args.h"
 #include "terse/lexer.h"
-#include "terse/main.h"
 #include "terse/parser.h"
 #include "terse/token.h"
 

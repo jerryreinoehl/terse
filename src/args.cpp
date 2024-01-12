@@ -1,4 +1,4 @@
-#include "terse/args.h"
+#include "args.h"
 
 #include <string_view>
 
