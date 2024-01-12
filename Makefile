@@ -2,10 +2,9 @@ NAME = terse
 
 CC := c++
 CFLAGS := -Wall -Wextra -Werror -Weffc++ -O2
-INC = -Iinclude
 TARGET = trs
-SRCS = $(wildcard src/*.cpp)
-HDRS = $(wildcard include/**/*.h)
+SRCS = $(wildcard src/*.cpp src/**/*.cpp)
+HDRS = $(wildcard src/*.h src/**/*.h)
 OBJS = $(patsubst src/%.cpp, build/%.o, $(SRCS))
 
 DESTDIR :=
@@ -19,13 +18,13 @@ RELEASE = $(NAME)-$(VERSION).tar.gz
 all: build build/$(TARGET)
 
 build/$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(INC) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^
 
 build/%.o: src/%.cpp $(HDRS)
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 build:
-	mkdir -p ./build
+	mkdir -p ./build/terse
 
 .PHONY: install
 install: build/$(TARGET)

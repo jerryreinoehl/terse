@@ -4,16 +4,18 @@
 #include <string>
 #include <string_view>
 
-class Token {
-  public:
-    enum class Type { NONE, STRING, MAPS, MAP_BEGIN, MAP_END, END, STOP };
+namespace terse {
+  class Token {
+    public:
+      enum class Type { NONE, STRING, MAPS, MAP_BEGIN, MAP_END, END, STOP };
 
-    Token(Type type = Type::NONE, std::string_view value = {});
+      Token(Type type = Type::NONE, std::string_view value = {});
 
-    Type type() const noexcept;
-    std::string value() const noexcept;
+      Type type() const noexcept;
+      std::string value() const noexcept;
 
-  private:
-    Type type_;
-    std::optional<std::string> value_;
-};
+    private:
+      Type type_;
+      std::optional<std::string> value_;
+  };
+}

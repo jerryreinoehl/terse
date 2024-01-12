@@ -34,8 +34,8 @@ int main(int argc, char **argv) {
   in.read(buf.get(), size);
   in.close();
 
-  Parser parser{buf.get(), static_cast<size_t>(size)};
-  TokenMap map = parser.parse().value_or(TokenMap{});
+  terse::Parser parser{buf.get(), static_cast<size_t>(size)};
+  terse::TokenMap map = parser.parse().value_or(terse::TokenMap{});
 
   std::vector<std::string> converted = translate(args.command(), map);
 
@@ -54,9 +54,11 @@ int main(int argc, char **argv) {
   return rc;
 }
 
-std::vector<std::string> translate(const std::vector<std::string>& args, const TokenMap& map) {
+std::vector<std::string> translate(
+  const std::vector<std::string>& args, const terse::TokenMap& map
+) {
   std::vector<std::string> converted;
-  TokenMap tm = map;
+  terse::TokenMap tm = map;
 
   for (const auto& arg : args) {
     auto it = tm.find(arg);

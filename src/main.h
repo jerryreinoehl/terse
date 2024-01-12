@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-std::vector<std::string> translate(const std::vector<std::string>& args, const TokenMap& map);
+std::vector<std::string> translate(const std::vector<std::string>& args, const terse::TokenMap& map);
 
 int execute(const std::vector<std::string>& args);
 

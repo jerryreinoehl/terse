@@ -2,6 +2,9 @@
 
 #include <cctype>
 
+using terse::Lexer;
+using terse::Token;
+
 Lexer::Lexer(const char *buf, size_t size)
   : buf_{buf}, cur_{buf}, end_{buf_ + size}
 {}

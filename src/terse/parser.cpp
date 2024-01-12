@@ -2,6 +2,10 @@
 
 #include <stack>
 
+using terse::Parser;
+using terse::Token;
+using terse::TokenMap;
+
 Parser::Parser(const char *buf, size_t size) : lexer_{buf, size} {}
 
 std::optional<TokenMap> Parser::parse() {
