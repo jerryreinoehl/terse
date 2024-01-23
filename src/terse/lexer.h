@@ -17,9 +17,6 @@ namespace terse {
       const char *cur_;         // Current position in buffer.
       const char *const end_;   // End of buffer.
 
-      const char *tok_begin_{}; // Beginning position of token in buffer.
-      const char *tok_end_{};   // End position of token in buffer.
-
       bool at_end_of_statement_{false};
 
       // Move `cur_` to next non-whitespace character.
