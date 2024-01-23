@@ -1,6 +1,7 @@
 #include "lexer.h"
 
 #include <cctype>
+#include <string_view>
 
 using terse::Lexer;
 using terse::Token;
@@ -10,8 +11,9 @@ Lexer::Lexer(const char *buf, size_t size)
 {}
 
 Token Lexer::next() {
-  const char *toks, *toke;
-  std::string value;
+  const char *toks;
+  std::string_view value;
+  std::string_view::size_type len;
 
   if (at_end_of_statement_) {
     at_end_of_statement_ = false;
@@ -31,8 +33,8 @@ Token Lexer::next() {
   if (cur_ >= end_)
     cur_ = end_;
 
-  toke = cur_;
-  value = std::string{toks, toke};
+  len = cur_ - toks;
+  value = std::string_view{toks, len};
 
   if (value == "=>") {
     return {Token::Type::MAPS};
