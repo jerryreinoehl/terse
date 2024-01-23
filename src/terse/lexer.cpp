@@ -13,8 +13,8 @@ Token Lexer::next() {
   const char *toks, *toke;
   std::string value;
 
-  if (eos_) {
-    eos_ = false;
+  if (at_end_of_statement_) {
+    at_end_of_statement_ = false;
     return {Token::Type::END};
   }
 
@@ -43,7 +43,7 @@ Token Lexer::next() {
   } else {
     skip_space();
     if (*cur_ == '\n' || *cur_ == COMMENT)
-      eos_ = true;
+      at_end_of_statement_ = true;
 
     return {Token::Type::STRING, value};
   }
