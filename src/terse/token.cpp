@@ -1,13 +1,17 @@
 #include "token.h"
 
 using terse::Token;
+using terse::TokenType;
+using terse::WordToken;
 
-Token::Token(Type type, std::string_view value) : type_{type}, value_{value} {}
+Token::Token(TokenType type) : type_{type} {}
 
-Token::Type Token::type() const noexcept {
+TokenType Token::type() const noexcept {
   return type_;
 }
 
-std::string Token::value() const noexcept {
-  return value_.value_or("");
+WordToken::WordToken(const std::string& value) : Token{TokenType::WORD}, value_{value} {}
+
+std::string WordToken::value() const noexcept {
+  return value_;
 }

@@ -1,21 +1,40 @@
 #pragma once
 
-#include <optional>
 #include <string>
-#include <string_view>
 
 namespace terse {
+
+  enum class TokenType {
+    ARM,
+    BRACE_LEFT,
+    BRACE_RIGHT,
+    DOUBLE_QUOTE,
+    FUNC,
+    NEWLINE,
+    PAREN_LEFT,
+    PAREN_RIGHT,
+    STOP,
+    WORD,
+  };
+
   class Token {
     public:
-      enum class Type { NONE, STRING, MAPS, MAP_BEGIN, MAP_END, END, STOP };
+      Token(TokenType type);
 
-      Token(Type type = Type::NONE, std::string_view value = {});
+      TokenType type() const noexcept;
 
-      Type type() const noexcept;
+    private:
+      TokenType type_;
+  };
+
+  class WordToken : public Token {
+    public:
+      WordToken(const std::string& value);
+
       std::string value() const noexcept;
 
     private:
-      Type type_;
-      std::optional<std::string> value_;
+      std::string value_{};
   };
+
 }
