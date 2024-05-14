@@ -6,10 +6,11 @@ namespace terse {
 
   class BufferedReader {
     public:
+
       BufferedReader(std::istream& stream, size_t size = 4096)
-        : stream_{stream}, size_{size}, buf_{new char[size_]}
+        : stream_{stream}, size_{size}
       {
-        readmore();
+        cur_ = end_ = buf_ = new char[size_];
       }
 
       ~BufferedReader() {
@@ -17,14 +18,21 @@ namespace terse {
         buf_ = cur_ = end_ = nullptr;
       }
 
-      char getchar() {
-        char c = *cur_++;
-
+      char get() {
         if (cur_ == end_) {
           readmore();
+          if (eof_) {
+            return EOF;
+          }
         }
 
-        return c;
+        return *cur_++;
+      }
+
+      void putback() {
+        if (cur_ > buf_) {
+          cur_--;
+        }
       }
 
       bool eof() const noexcept {
@@ -55,7 +63,6 @@ namespace terse {
 
         if (bytes_read == 0) {
           eof_ = true;
-          buf_[0] = 0;
         }
       }
   };
