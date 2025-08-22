@@ -31,7 +31,7 @@ namespace terse {
 
       void putback() {
         if (cur_ > buf_) {
-          cur_--;
+          --cur_;
         }
       }
 
@@ -40,7 +40,7 @@ namespace terse {
       }
 
       BufferedReader& operator>>(char& c) {
-        c = getchar();
+        c = get();
         return *this;
       }
 
