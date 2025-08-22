@@ -1,34 +1,71 @@
 #pragma once
 
+#include "bufferedreader.h"
 #include "token.h"
+
+#include <iostream>
 
 namespace terse {
   class Lexer {
     public:
-      Lexer(const char *buf, size_t size);
+      Lexer(std::istream& stream) : stream_{stream}, reader_{stream, 4096} {}
+      Lexer(std::istream&& stream) : Lexer{stream} {}
 
       // Return next `Token` in buffer.
       Token next();
 
     private:
-      static const char COMMENT{'#'};
+      std::istream& stream_; // Do we really need to keep a ref of this.
 
-      const char *const buf_;   // Start of buffer.
-      const char *cur_;         // Current position in buffer.
-      const char *const end_;   // End of buffer.
+      BufferedReader reader_;
+      char c_;
+      int line_{1};
+      int col_{1};
+      int prev_col_{1};
 
-      bool at_end_of_statement_{false};
+      void skip_whitespace() {
+        char c;
+        do {
+          c = get();
+        } while (c == ' ' or c == '\t');
+        putback();
+      }
 
-      // Move `cur_` to next non-whitespace character.
-      void skip_whitespace();
+      bool is_space(int c) {
+        return (c == ' ' || c == '\t');
+      }
 
-      // Move `cur_` to next non-space character.
-      void skip_space();
+      bool is_special(int c) {
+        return (c == ' ' || c == '#' || c == '\n' || c == '\t');
+      }
 
-      // Move `cur_` to end of line.
-      void skip_line();
+      void readline() {
+        char c;
+        while ((c = get()) != '\n');
+      }
 
-      // Move `cur_` to next character. Skips whitespace and comments.
-      void seek();
+      char get() {
+        char c = reader_.get();
+
+        if (c == '\n') {
+          ++line_;
+          prev_col_ = col_;
+          col_ = 1;
+        } else {
+          ++col_;
+        }
+
+        return c;
+      }
+
+      void putback() {
+        reader_.putback();
+
+        --col_;
+        if (col_ < 1) {
+          --line_;
+          col_ = prev_col_;
+        }
+      }
   };
 }
