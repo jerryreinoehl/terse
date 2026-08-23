@@ -4,6 +4,7 @@
 #include "token.h"
 
 #include <iostream>
+#include <memory>
 
 namespace terse {
   class Lexer {
@@ -12,7 +13,7 @@ namespace terse {
       Lexer(std::istream&& stream) : Lexer{stream} {}
 
       // Return next `Token` in buffer.
-      Token next();
+      std::unique_ptr<const Token> next();
 
     private:
       std::istream& stream_; // Do we really need to keep a ref of this.
@@ -35,8 +36,12 @@ namespace terse {
         return (c == ' ' || c == '\t');
       }
 
-      bool is_special(int c) {
-        return (c == ' ' || c == '#' || c == '\n' || c == '\t');
+      bool is_word_boundary(int c) {
+        return (c == ' ' || c == '\n' || c == '\t' || c == '#' || c == '"');
+      }
+
+      bool is_end_of_line(int c) {
+        return (c == '\n' || c == EOF);
       }
 
       void readline() {

@@ -1,12 +1,12 @@
 #include "lexer.h"
-#include "bufferedreader.h"
 
+#include <memory>
 #include <sstream>
 
 using terse::Lexer;
 using terse::Token;
 
-Token Lexer::next() {
+std::unique_ptr<const Token> Lexer::next() {
   char c;
   std::stringstream lexeme{};
   int line, col;
@@ -19,30 +19,43 @@ Token Lexer::next() {
     c = get();
 
     if (c == '\n') {
-      return {TokenType::NEWLINE, line, col};
+      return std::make_unique<const Token>(TokenType::NEWLINE, line, col);
     } else if (c == EOF) {
-      return {TokenType::STOP, line, col};
+      return std::make_unique<const Token>(TokenType::STOP, line, col);
     } else if (c == '#') {
       readline();
-      return {TokenType::NEWLINE, line, col};
+      return std::make_unique<const Token>(TokenType::NEWLINE, line, col);
     } else {
       break;
     }
   }
 
-  do {
-    lexeme << c;
-  } while (!is_special(c = get()));
+  while (true) {
+    if (c == '"') {
+      // Scan until next '"'.
+      while ((c = get()) != '"') {
+        if (is_end_of_line(c)) {
+          putback();
+          return std::make_unique<const ErrorToken>("Unterminated string", line, col);
+        }
+        lexeme << c;
+      }
+      c = get();
+    } else if (is_word_boundary(c)) {
+      break;
+    } else {
+      lexeme << c;
+      c = get();
+    }
+  }
 
   putback();
-  std::cout << "lexeme is " << lexeme.str() << '\n';
 
   TokenType type = TokenType::from_lexeme(lexeme.str());
-  std::cout << "type is " << type << '\n';
 
   if (type == TokenType::NONE) {
-    return WordToken{lexeme.str(), line, col};
+    return std::make_unique<const StringToken>(lexeme.str(), line, col);
   } else {
-    return {type, line, col};
+    return std::make_unique<const Token>(type, line, col);
   }
 }
