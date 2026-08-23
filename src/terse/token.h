@@ -15,12 +15,13 @@ namespace terse {
       static const TokenType BRACE_LEFT;
       static const TokenType BRACE_RIGHT;
       static const TokenType DOUBLE_QUOTE;
+      static const TokenType ERROR;
       static const TokenType FUNC;
       static const TokenType NEWLINE;
       static const TokenType PAREN_LEFT;
       static const TokenType PAREN_RIGHT;
       static const TokenType STOP;
-      static const TokenType WORD;
+      static const TokenType STRING;
 
       static TokenType from_lexeme(const std::string& lexeme);
 
@@ -72,14 +73,24 @@ namespace terse {
       int col_;
   };
 
-  class WordToken : public Token {
+  class StringToken : public Token {
     public:
-      WordToken(const std::string& value, int line, int col);
+      StringToken(const std::string& value, int line, int col);
 
       std::string value() const noexcept;
 
     private:
       std::string value_{};
+  };
+
+  class ErrorToken : public Token {
+    public:
+      ErrorToken(const std::string& error, int line, int col);
+
+      std::string error() const noexcept;
+
+    private:
+      std::string error_{};
   };
 
 }
