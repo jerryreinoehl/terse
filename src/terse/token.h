@@ -2,9 +2,11 @@
 
 #include <iostream>
 #include <map>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
+#include <cassert>
 
 namespace terse {
 
@@ -22,6 +24,7 @@ namespace terse {
       static const TokenType PAREN_RIGHT;
       static const TokenType STOP;
       static const TokenType STRING;
+
 
       static TokenType from_lexeme(const std::string& lexeme);
 
@@ -55,9 +58,13 @@ namespace terse {
       static std::vector<std::string_view> names;
 
       Value value_;
+
   };
 
   std::ostream& operator<<(std::ostream& out, TokenType type);
+
+  template <typename T>
+  struct TokenTraits;
 
   class Token {
     public:
@@ -67,11 +74,23 @@ namespace terse {
       int line() const noexcept;
       int col() const noexcept;
 
+      template <typename T>
+      bool is() const {
+        return type_ == TokenTraits<T>::type();
+      }
+
+      template <typename T>
+      const T& as() const {
+        assert(type() == TokenTraits<T>::type());
+        return *static_cast<const T*>(this);
+      }
+
     private:
       TokenType type_;
       int line_;
       int col_;
   };
+
 
   class StringToken : public Token {
     public:
@@ -91,6 +110,20 @@ namespace terse {
 
     private:
       std::string error_{};
+  };
+
+  template <>
+  struct TokenTraits<StringToken> {
+    static const TokenType &type() noexcept {
+      return TokenType::STRING;
+    }
+  };
+
+  template <>
+  struct TokenTraits<ErrorToken> {
+    static const TokenType &type() noexcept {
+      return TokenType::ERROR;
+    }
   };
 
 }
