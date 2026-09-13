@@ -204,6 +204,24 @@ class Expected {
       return Result{func(std::move(storage_.error))};
     }
 
+    template <typename U>
+    V value_or(U&& fallback) & {
+      if (has_value_) {
+        return storage_.value;
+      }
+
+      return static_cast<V>(std::forward<U>(fallback));
+    }
+
+    template <typename U>
+    V value_or(U&& fallback) && {
+      if (has_value_) {
+        return std::move(storage_.value);
+      }
+
+      return static_cast<V>(std::forward<U>(fallback));
+    }
+
     Expected<V, E>& operator=(const Expected<V, E>& rhs) noexcept {
       std::cout << "In copy assign\n";
       if (this == &rhs) {
