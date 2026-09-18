@@ -3,10 +3,30 @@
 #include <iostream>
 
 template <typename E>
-class Unexpected {
+class unexpected {
   public:
-    Unexpected(const E& error) : error_{error} {}
-    Unexpected(E&& error) : error_{std::move(error)} {}
+    unexpected(const E& error) : error_{error} {}
+    unexpected(E&& error) : error_{std::move(error)} {}
+
+    unexpected& operator=(const unexpected<E>& rhs) {
+      if (*this == &rhs) {
+        return *this;
+      }
+
+      error_ = rhs.error_;
+
+      return *this;
+    }
+
+    unexpected& operator=(unexpected<E>&& rhs) {
+      if (*this == &rhs) {
+        return *this;
+      }
+
+      error_ = std::move(rhs.error_);
+
+      return *this;
+    }
 
     const E& error() const& noexcept {
       return error_;
@@ -20,61 +40,51 @@ class Unexpected {
     E error_;
 };
 
-template <typename E>
-Unexpected<E> unexpected(const E& error) {
-  return Unexpected<E>{error};
-}
-
-template <typename E>
-Unexpected<E> unexpected(E&& error) {
-  return Unexpected<E>{std::move(error)};
-}
-
 template <typename V, typename E>
-class Expected;
+class expected;
 
 template <typename T>
 struct expected_traits;
 
 template <typename V, typename E>
-struct expected_traits<Expected<V, E>> {
+struct expected_traits<expected<V, E>> {
   typedef V value_type;
   typedef E error_type;
 };
 
 template <typename E>
-struct expected_traits<Unexpected<E>> {
+struct expected_traits<unexpected<E>> {
   typedef E error_type;
 };
 
 template <typename T, typename V, typename E>
 struct normalize_expected {
-  typedef Expected<typename std::decay<T>::type, E> type;
+  typedef expected<typename std::decay<T>::type, E> type;
 };
 
 template <typename U, typename F, typename V, typename E>
-struct normalize_expected<Expected<U, F>, V, E> {
-  typedef Expected<U, F> type;
+struct normalize_expected<expected<U, F>, V, E> {
+  typedef expected<U, F> type;
 };
 
 template <typename F, typename V, typename E>
-struct normalize_expected<Unexpected<F>, V, E> {
-  typedef Expected<V, F> type;
+struct normalize_expected<unexpected<F>, V, E> {
+  typedef expected<V, F> type;
 };
 
 template <typename V, typename E>
-class Expected {
+class expected {
   public:
 
-    Expected(const V& value) : has_value_{true} {
+    expected(const V& value) : has_value_{true} {
       new (&storage_.value) V{value};
     }
 
-    Expected(V&& value) : has_value_{true} {
+    expected(V&& value) : has_value_{true} {
       new (&storage_.value) V{std::move(value)};
     }
 
-    Expected(const Expected<V, E>& expected) : has_value_{expected.has_value_} {
+    expected(const expected<V, E>& expected) : has_value_{expected.has_value_} {
       if (has_value_) {
         new (&storage_.value) V{expected.storage_.value};
       } else {
@@ -82,7 +92,7 @@ class Expected {
       }
     }
 
-    Expected(Expected<V, E>&& expected) : has_value_{expected.has_value_} {
+    expected(expected<V, E>&& expected) : has_value_{expected.has_value_} {
       if (has_value_) {
         new (&storage_.value) V{std::move(expected.storage_.value)};
       } else {
@@ -90,15 +100,15 @@ class Expected {
       }
     }
 
-    Expected(const Unexpected<E>& error) : has_value_{false} {
+    expected(const unexpected<E>& error) : has_value_{false} {
       new (&storage_.error) E{error.error()};
     }
 
-    Expected(Unexpected<E>&& error) : has_value_{false} {
+    expected(unexpected<E>&& error) : has_value_{false} {
       new (&storage_.error) E{std::move(error.error())};
     }
 
-    ~Expected() {
+    ~expected() {
       destroy();
     }
 
@@ -136,14 +146,14 @@ class Expected {
 
       static_assert(
         std::is_same<typename expected_traits<Result>::error_type, E>::value,
-        "and_then callback must return either Expected<V, E> or Expected<E>"
+        "and_then callback must return either expected<V, E> or expected<E>"
       );
 
       if (has_value_) {
         return Result{func(storage_.value)};
       }
 
-      return Result{unexpected(storage_.error)};
+      return Result{unexpected<E>(storage_.error)};
     }
 
     template <typename F>
@@ -156,18 +166,18 @@ class Expected {
 
       static_assert(
         std::is_same<typename expected_traits<Result>::error_type, E>::value,
-        "and_then callback must return either Expected<V, E> or Expected<E>"
+        "and_then callback must return either expected<V, E> or expected<E>"
       );
 
       if (has_value_) {
         return Result{func(std::move(storage_.value))};
       }
 
-      return Result{unexpected(std::move(storage_.error))};
+      return Result{unexpected<E>(std::move(storage_.error))};
     }
 
     template <typename F>
-    Expected<V, E>
+    expected<V, E>
     or_else(F&& func) & {
       typedef typename std::result_of<F(E&)>::type CallbackResult;
       typedef typename normalize_expected<CallbackResult, V, E>::type Result;
@@ -175,7 +185,7 @@ class Expected {
       static_assert(
         std::is_same<typename expected_traits<Result>::value_type, V>::value &&
         std::is_same<typename expected_traits<Result>::error_type, E>::value,
-        "and_then callback must return either Expected<V, E> or Expected<E>"
+        "and_then callback must return either expected<V, E> or expected<E>"
       );
 
       if (has_value_) {
@@ -186,7 +196,7 @@ class Expected {
     }
 
     template <typename F>
-    Expected<V, E>
+    expected<V, E>
     or_else(F&& func) && {
       typedef typename std::result_of<F(E&&)>::type CallbackResult;
       typedef typename normalize_expected<CallbackResult, V, E>::type Result;
@@ -194,7 +204,7 @@ class Expected {
       static_assert(
         std::is_same<typename expected_traits<Result>::value_type, V>::value &&
         std::is_same<typename expected_traits<Result>::error_type, E>::value,
-        "and_then callback must return either Expected<V, E> or Expected<E>"
+        "and_then callback must return either expected<V, E> or expected<E>"
       );
 
       if (has_value_) {
@@ -222,8 +232,7 @@ class Expected {
       return static_cast<V>(std::forward<U>(fallback));
     }
 
-    Expected<V, E>& operator=(const Expected<V, E>& rhs) noexcept {
-      std::cout << "In copy assign\n";
+    expected<V, E>& operator=(const expected<V, E>& rhs) noexcept {
       if (this == &rhs) {
         return *this;
       }
@@ -240,8 +249,7 @@ class Expected {
       return *this;
     }
 
-    Expected<V, E>& operator=(Expected<V, E>&& rhs) noexcept {
-      std::cout << "In move assign\n";
+    expected<V, E>& operator=(expected<V, E>&& rhs) noexcept {
       if (this == &rhs) {
         return *this;
       }
