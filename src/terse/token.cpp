@@ -6,7 +6,8 @@ using terse::StringToken;
 using terse::ErrorToken;
 
 std::vector<std::string_view> TokenType::names{TokenType::value_count};
-std::map<std::string_view, terse::TokenType> map{};
+std::map<std::string_view, terse::TokenType> TokenType::map{};
+TokenType TokenType::token_type{TokenType::token_type_t{}};
 
 void TokenType::add(TokenType type, std::string_view name) {
   TokenType::names[type] = name;
@@ -17,13 +18,8 @@ void TokenType::add(TokenType type, std::string_view name, std::string_view lexe
   TokenType::map[lexeme] = type;
 }
 
-TokenType from_lexeme(std::string_view lexeme) {
+TokenType TokenType::from_lexeme(std::string_view lexeme) {
   return TokenType::map[lexeme];
-}
-
-TokenType& TokenType::get_instance() noexcept {
-  static TokenType token_type{token_type_t{}};
-  return token_type;
 }
 
 std::string_view TokenType::to_string() const {
@@ -31,7 +27,6 @@ std::string_view TokenType::to_string() const {
 }
 
 TokenType::TokenType(TokenType::token_type_t) {
-  std::cout << "Init TokenType_\n";
   TokenType::add(TokenType::None, "None");
   TokenType::add(TokenType::Arm, "Arm", "=>");
   TokenType::add(TokenType::LeftBrace, "LeftBrace", "{");

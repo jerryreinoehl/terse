@@ -36,8 +36,6 @@ namespace terse {
 
       static TokenType from_lexeme(std::string_view lexeme);
 
-      static TokenType& get_instance() noexcept;
-
       TokenType() noexcept {}
       constexpr TokenType(Value value) noexcept : value{value} {}
       constexpr operator Value() const noexcept { return value; }
@@ -46,6 +44,8 @@ namespace terse {
 
     private:
       struct token_type_t {};
+
+      static TokenType token_type;
 
       Value value;
 
