@@ -52,7 +52,7 @@ namespace terse {
       TokenType(token_type_t);
   };
 
-  std::ostream& operator<<(std::ostream& out, TokenType type);
+  std::ostream& operator<<(std::ostream& out, TokenType::Value type);
 
   template <typename T>
   struct TokenTraits;

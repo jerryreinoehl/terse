@@ -46,8 +46,8 @@ TokenType::TokenType(TokenType::token_type_t) {
   TokenType::add(TokenType::String, "String");
 }
 
-std::ostream& terse::operator<<(std::ostream& out, TokenType type) {
-  return out << type.to_string();
+std::ostream& terse::operator<<(std::ostream& out, TokenType::Value type) {
+  return out << static_cast<TokenType>(type).to_string();
 }
 
 Token::Token(TokenType type, int line, int col) noexcept : line_{line}, col_{col}, type_{type} {}
