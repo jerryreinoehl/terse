@@ -2,18 +2,33 @@
 
 #include "bufferedreader.h"
 #include "token.h"
+#include "expected.h"
 
 #include <iostream>
 #include <memory>
 
 namespace terse {
+
+  class LexerError {
+    public:
+      LexerError(int line, int col, std::string message);
+
+    private:
+      int line_;
+      int col_;
+      std::string message_;
+  };
+
+  template <typename T>
+  using LexerResult = expected<T, LexerError>;
+
   class Lexer {
     public:
       Lexer(std::istream& stream) : stream_{stream}, reader_{stream, 4096} {}
       Lexer(std::istream&& stream) : Lexer{stream} {}
 
       // Return next `Token` in buffer.
-      std::unique_ptr<const Token> next();
+      LexerResult<std::unique_ptr<const Token>> next();
 
     private:
       std::istream& stream_; // Do we really need to keep a ref of this.
@@ -24,7 +39,7 @@ namespace terse {
       int col_{1};
       int prev_col_{1};
 
-      void skip_whitespace() {
+      void skip_whitespace() noexcept {
         char c;
         do {
           c = get();
@@ -32,24 +47,24 @@ namespace terse {
         putback();
       }
 
-      bool is_space(int c) {
+      bool is_space(int c) const noexcept {
         return (c == ' ' || c == '\t');
       }
 
-      bool is_word_boundary(int c) {
+      bool is_word_boundary(int c) const noexcept {
         return (c == ' ' || c == '\n' || c == '\t' || c == '#' || c == '"');
       }
 
-      bool is_end_of_line(int c) {
+      bool is_end_of_line(int c) const noexcept {
         return (c == '\n' || c == EOF);
       }
 
-      void readline() {
+      void readline() noexcept {
         char c;
         while ((c = get()) != '\n');
       }
 
-      char get() {
+      char get() noexcept {
         char c = reader_.get();
 
         if (c == '\n') {
@@ -63,7 +78,7 @@ namespace terse {
         return c;
       }
 
-      void putback() {
+      void putback() noexcept {
         reader_.putback();
 
         --col_;

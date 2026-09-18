@@ -4,9 +4,15 @@
 #include <sstream>
 
 using terse::Lexer;
+using terse::LexerError;
+using terse::LexerResult;
 using terse::Token;
 
-std::unique_ptr<const Token> Lexer::next() {
+
+LexerError::LexerError(int line, int col, std::string message) : line_{line}, col_{col}, message_{message} {}
+
+
+LexerResult<std::unique_ptr<const Token>> Lexer::next() {
   char c;
   std::stringstream lexeme{};
   int line, col;
@@ -19,12 +25,12 @@ std::unique_ptr<const Token> Lexer::next() {
     c = get();
 
     if (c == '\n') {
-      return std::make_unique<const Token>(TokenType::NEWLINE, line, col);
+      return {std::make_unique<const Token>(TokenType::Newline, line, col)};
     } else if (c == EOF) {
-      return std::make_unique<const Token>(TokenType::STOP, line, col);
+      return {std::make_unique<const Token>(TokenType::Stop, line, col)};
     } else if (c == '#') {
       readline();
-      return std::make_unique<const Token>(TokenType::NEWLINE, line, col);
+      return {std::make_unique<const Token>(TokenType::Newline, line, col)};
     } else {
       break;
     }
@@ -36,7 +42,7 @@ std::unique_ptr<const Token> Lexer::next() {
       while ((c = get()) != '"') {
         if (is_end_of_line(c)) {
           putback();
-          return std::make_unique<const ErrorToken>("Unterminated string", line, col);
+          return unexpected<LexerError>{line, col, "Unterminated string"};
         }
         lexeme << c;
       }
@@ -53,9 +59,9 @@ std::unique_ptr<const Token> Lexer::next() {
 
   TokenType type = TokenType::from_lexeme(lexeme.str());
 
-  if (type == TokenType::NONE) {
-    return std::make_unique<const StringToken>(lexeme.str(), line, col);
+  if (type == TokenType::None) {
+    return {std::make_unique<const StringToken>(lexeme.str(), line, col)};
   } else {
-    return std::make_unique<const Token>(type, line, col);
+    return {std::make_unique<const Token>(type, line, col)};
   }
 }
