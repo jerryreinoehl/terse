@@ -39,8 +39,8 @@ namespace terse {
       static TokenType& get_instance();
 
       TokenType() {}
-      TokenType(Value value) : value{value} {}
-      operator Value() const { return value; }
+      constexpr TokenType(Value value) : value{value} {}
+      constexpr operator Value() const { return value; }
 
       std::string_view to_string() const;
 
@@ -105,12 +105,12 @@ namespace terse {
 
   template <>
   struct TokenTraits<StringToken> {
-    const TokenType type{TokenType::String};
+    static constexpr TokenType type{TokenType::String};
   };
 
   template <>
   struct TokenTraits<ErrorToken> {
-    const TokenType type{TokenType::Error};
+    static constexpr TokenType type{TokenType::Error};
   };
 
 }
