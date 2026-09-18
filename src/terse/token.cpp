@@ -21,7 +21,7 @@ TokenType from_lexeme(std::string_view lexeme) {
   return TokenType::map[lexeme];
 }
 
-TokenType& TokenType::get_instance() {
+TokenType& TokenType::get_instance() noexcept {
   static TokenType token_type{token_type_t{}};
   return token_type;
 }
@@ -60,13 +60,15 @@ int Token::col() const noexcept {
   return col_;
 }
 
-StringToken::StringToken(const std::string& value, int line, int col) : Token{TokenType::String, line, col}, value_{value} {}
+StringToken::StringToken(const std::string& value, int line, int col) noexcept
+  : Token{TokenType::String, line, col}, value_{value} {}
 
 std::string StringToken::value() const noexcept {
   return value_;
 }
 
-ErrorToken::ErrorToken(const std::string& error, int line, int col) : Token{TokenType::Error, line, col}, error_{error} {}
+ErrorToken::ErrorToken(const std::string& error, int line, int col) noexcept
+  : Token{TokenType::Error, line, col}, error_{error} {}
 
 std::string ErrorToken::error() const noexcept {
   return error_;

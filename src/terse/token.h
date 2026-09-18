@@ -36,11 +36,11 @@ namespace terse {
 
       static TokenType from_lexeme(std::string_view lexeme);
 
-      static TokenType& get_instance();
+      static TokenType& get_instance() noexcept;
 
-      TokenType() {}
-      constexpr TokenType(Value value) : value{value} {}
-      constexpr operator Value() const { return value; }
+      TokenType() noexcept {}
+      constexpr TokenType(Value value) noexcept : value{value} {}
+      constexpr operator Value() const noexcept { return value; }
 
       std::string_view to_string() const;
 
@@ -66,7 +66,7 @@ namespace terse {
       int col() const noexcept;
 
       template <typename T>
-      bool is() const {
+      bool is() const noexcept {
         return type_ == TokenTraits<T>::type;
       }
 
@@ -85,7 +85,7 @@ namespace terse {
 
   class StringToken : public Token {
     public:
-      StringToken(const std::string& value, int line, int col);
+      StringToken(const std::string& value, int line, int col) noexcept;
 
       std::string value() const noexcept;
 
@@ -95,7 +95,7 @@ namespace terse {
 
   class ErrorToken : public Token {
     public:
-      ErrorToken(const std::string& error, int line, int col);
+      ErrorToken(const std::string& error, int line, int col) noexcept;
 
       std::string error() const noexcept;
 
