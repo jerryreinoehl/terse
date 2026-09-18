@@ -1,12 +1,13 @@
 #pragma once
 
-#include <iostream>
-
 template <typename E>
 class unexpected {
   public:
     unexpected(const E& error) : error_{error} {}
     unexpected(E&& error) : error_{std::move(error)} {}
+
+    template <typename... Args>
+    unexpected(Args&&... args) : unexpected{E{std::forward<Args>(args)...}} {}
 
     unexpected& operator=(const unexpected<E>& rhs) {
       if (*this == &rhs) {
@@ -83,6 +84,9 @@ class expected {
     expected(V&& value) : has_value_{true} {
       new (&storage_.value) V{std::move(value)};
     }
+
+    template <typename... Args>
+    expected(Args&&... args) : expected{V{std::forward<Args>(args)...}} {}
 
     expected(const expected<V, E>& expected) : has_value_{expected.has_value_} {
       if (has_value_) {
