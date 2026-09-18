@@ -12,53 +12,43 @@ namespace terse {
 
   class TokenType {
     public:
-      static const TokenType NONE;
-      static const TokenType ARM;
-      static const TokenType BRACE_LEFT;
-      static const TokenType BRACE_RIGHT;
-      static const TokenType DOUBLE_QUOTE;
-      static const TokenType ERROR;
-      static const TokenType FUNC;
-      static const TokenType NEWLINE;
-      static const TokenType PAREN_LEFT;
-      static const TokenType PAREN_RIGHT;
-      static const TokenType STOP;
-      static const TokenType STRING;
+      enum Value {
+        Arm,
+        LeftBrace,
+        RightBrace,
+        DoubleQuote,
+        Error,
+        Func,
+        Newline,
+        LeftParen,
+        RightParen,
+        Stop,
+        String,
+        None, // Keep this last as it is used for TokenType element count.
+      };
 
+      static constexpr std::size_t value_count{static_cast<std::size_t>(None + 1)};
+      static std::vector<std::string_view> names;
+      static std::map<std::string_view, TokenType> map;
 
-      static TokenType from_lexeme(const std::string& lexeme);
+      static void add(TokenType type, std::string_view name);
+      static void add(TokenType type, std::string_view name, std::string_view lexeme);
 
-      TokenType() noexcept {}
+      static TokenType& get_instance();
 
-      TokenType(const std::string_view name) : value_{next_value++} {
-        names.push_back(name);
-      }
+      TokenType() {}
+      TokenType(Value value) : value{value} {}
+      operator Value() const { return value; }
 
-      TokenType(const std::string_view lexeme, const std::string_view name) : TokenType{name} {
-        map[lexeme] = *this;
-      }
-
-      std::string to_string() const noexcept {
-        return std::string{names[value_]};
-      }
-
-      bool operator==(const TokenType other) const noexcept {
-        return value_ == other.value_;
-      }
-
-      bool operator!=(const TokenType other) const noexcept {
-        return value_ != other.value_;
-      }
+      std::string_view to_string() const;
+      TokenType from_lexeme(std::string_view lexeme) const;
 
     private:
-      using Value = unsigned char;
+      struct token_type_t {};
 
-      static Value next_value;
-      static std::map<std::string_view, TokenType> map;
-      static std::vector<std::string_view> names;
+      Value value;
 
-      Value value_;
-
+      TokenType(token_type_t);
   };
 
   std::ostream& operator<<(std::ostream& out, TokenType type);
@@ -70,25 +60,25 @@ namespace terse {
     public:
       Token(TokenType type, int line, int col) noexcept;
 
-      const TokenType type() const noexcept;
+      TokenType type() const noexcept;
       int line() const noexcept;
       int col() const noexcept;
 
       template <typename T>
       bool is() const {
-        return type_ == TokenTraits<T>::type();
+        return type_ == TokenTraits<T>::type;
       }
 
       template <typename T>
       const T& as() const {
-        assert(type() == TokenTraits<T>::type());
-        return *static_cast<const T*>(this);
+        assert(type_ == TokenTraits<T>::type);
+        return static_cast<const T&>(*this);
       }
 
     private:
-      TokenType type_;
       int line_;
       int col_;
+      TokenType type_;
   };
 
 
@@ -114,16 +104,12 @@ namespace terse {
 
   template <>
   struct TokenTraits<StringToken> {
-    static const TokenType &type() noexcept {
-      return TokenType::STRING;
-    }
+    const TokenType type{TokenType::String};
   };
 
   template <>
   struct TokenTraits<ErrorToken> {
-    static const TokenType &type() noexcept {
-      return TokenType::ERROR;
-    }
+    const TokenType type{TokenType::Error};
   };
 
 }

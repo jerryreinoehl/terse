@@ -5,42 +5,52 @@ using terse::TokenType;
 using terse::StringToken;
 using terse::ErrorToken;
 
-TokenType::Value TokenType::next_value{0};
-std::map<std::string_view, TokenType> TokenType::map{};
-std::vector<std::string_view> TokenType::names{};
+std::vector<std::string_view> TokenType::names{TokenType::value_count};
+std::map<std::string_view, terse::TokenType> map{};
 
-const TokenType TokenType::NONE{"NONE"};
-const TokenType TokenType::ARM{"=>", "ARM"};
-const TokenType TokenType::BRACE_LEFT{"{", "BRACE_LEFT"};
-const TokenType TokenType::BRACE_RIGHT{"}", "BRACE_RIGHT"};
-const TokenType TokenType::DOUBLE_QUOTE{"\"", "DOUBLE_QUOTE"};
-const TokenType TokenType::ERROR{"ERROR"};
-const TokenType TokenType::FUNC{"$", "FUNC"};
-const TokenType TokenType::NEWLINE{"\n", "NEWLINE"};
-const TokenType TokenType::PAREN_LEFT{"(", "PAREN_LEFT"};
-const TokenType TokenType::PAREN_RIGHT{")", "PAREN_RIGHT"};
-const TokenType TokenType::STOP{"STOP"};
-const TokenType TokenType::STRING{"STRING"};
+void TokenType::add(TokenType type, std::string_view name) {
+  TokenType::names[type] = name;
+}
 
-TokenType TokenType::from_lexeme(const std::string& lexeme) {
-  auto it = map.find(lexeme);
+void TokenType::add(TokenType type, std::string_view name, std::string_view lexeme) {
+  TokenType::names[type] = name;
+  TokenType::map[lexeme] = type;
+}
 
-  if (it != map.end()) {
-    return it->second;
-  }
+TokenType& TokenType::get_instance() {
+  static TokenType token_type{token_type_t{}};
+  return token_type;
+}
 
-  return NONE;
+std::string_view TokenType::to_string() const {
+  return TokenType::names[value];
+}
+
+TokenType from_lexeme(std::string_view lexeme) {
+  return TokenType::map[lexeme];
+}
+
+TokenType::TokenType(TokenType::token_type_t) {
+  std::cout << "Init TokenType_\n";
+  TokenType::add(TokenType::None, "None");
+  TokenType::add(TokenType::Arm, "Arm", "=>");
+  TokenType::add(TokenType::LeftBrace, "LeftBrace", "{");
+  TokenType::add(TokenType::RightBrace, "RightBrace", "}");
+  TokenType::add(TokenType::DoubleQuote, "DoubleQuote", "\"");
+  TokenType::add(TokenType::Error, "Error");
+  TokenType::add(TokenType::Func, "Func", "$");
+  TokenType::add(TokenType::Newline, "Newline", "\n");
+  TokenType::add(TokenType::LeftParen, "LeftParen", "(");
+  TokenType::add(TokenType::RightParen, "RightParen", ")");
+  TokenType::add(TokenType::Stop, "Stop");
+  TokenType::add(TokenType::String, "String");
 }
 
 std::ostream& terse::operator<<(std::ostream& out, TokenType type) {
   return out << type.to_string();
 }
 
-Token::Token(TokenType type, int line, int col) noexcept : type_{type}, line_{line}, col_{col} {}
-
-const TokenType Token::type() const noexcept {
-  return type_;
-}
+Token::Token(TokenType type, int line, int col) noexcept : line_{line}, col_{col}, type_{type} {}
 
 int Token::line() const noexcept {
   return line_;
@@ -50,13 +60,13 @@ int Token::col() const noexcept {
   return col_;
 }
 
-StringToken::StringToken(const std::string& value, int line, int col) : Token{TokenType::STRING, line, col}, value_{value} {}
+StringToken::StringToken(const std::string& value, int line, int col) : Token{TokenType::String, line, col}, value_{value} {}
 
 std::string StringToken::value() const noexcept {
   return value_;
 }
 
-ErrorToken::ErrorToken(const std::string& error, int line, int col) : Token{TokenType::ERROR, line, col}, error_{error} {}
+ErrorToken::ErrorToken(const std::string& error, int line, int col) : Token{TokenType::Error, line, col}, error_{error} {}
 
 std::string ErrorToken::error() const noexcept {
   return error_;
