@@ -17,6 +17,10 @@ void TokenType::add(TokenType type, std::string_view name, std::string_view lexe
   TokenType::map[lexeme] = type;
 }
 
+TokenType from_lexeme(std::string_view lexeme) {
+  return TokenType::map[lexeme];
+}
+
 TokenType& TokenType::get_instance() {
   static TokenType token_type{token_type_t{}};
   return token_type;
@@ -24,10 +28,6 @@ TokenType& TokenType::get_instance() {
 
 std::string_view TokenType::to_string() const {
   return TokenType::names[value];
-}
-
-TokenType from_lexeme(std::string_view lexeme) {
-  return TokenType::map[lexeme];
 }
 
 TokenType::TokenType(TokenType::token_type_t) {

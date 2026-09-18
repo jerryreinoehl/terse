@@ -34,6 +34,8 @@ namespace terse {
       static void add(TokenType type, std::string_view name);
       static void add(TokenType type, std::string_view name, std::string_view lexeme);
 
+      static TokenType from_lexeme(std::string_view lexeme);
+
       static TokenType& get_instance();
 
       TokenType() {}
@@ -41,7 +43,6 @@ namespace terse {
       operator Value() const { return value; }
 
       std::string_view to_string() const;
-      TokenType from_lexeme(std::string_view lexeme) const;
 
     private:
       struct token_type_t {};
