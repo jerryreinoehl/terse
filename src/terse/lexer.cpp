@@ -4,15 +4,11 @@
 #include <sstream>
 
 using terse::Lexer;
-using terse::LexerError;
-using terse::LexerResult;
 using terse::Token;
+using terse::TokenResult;
 
 
-LexerError::LexerError(int line, int col, std::string message) : line_{line}, col_{col}, message_{message} {}
-
-
-LexerResult<std::unique_ptr<const Token>> Lexer::next() {
+TokenResult Lexer::next() {
   char c;
   std::stringstream lexeme{};
   int line, col;
@@ -42,7 +38,7 @@ LexerResult<std::unique_ptr<const Token>> Lexer::next() {
       while ((c = get()) != '"') {
         if (is_end_of_line(c)) {
           putback();
-          return unexpected<LexerError>{line, col, "Unterminated string"};
+          return unexpected<ParseError>{line, col, "Unterminated string"};
         }
         lexeme << c;
       }

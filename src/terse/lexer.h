@@ -1,26 +1,14 @@
 #pragma once
 
 #include "bufferedreader.h"
-#include "token.h"
+#include "error.h"
 #include "expected.h"
+#include "token.h"
 
 #include <iostream>
 #include <memory>
 
 namespace terse {
-
-  class LexerError {
-    public:
-      LexerError(int line, int col, std::string message);
-
-    private:
-      int line_;
-      int col_;
-      std::string message_;
-  };
-
-  template <typename T>
-  using LexerResult = expected<T, LexerError>;
 
   class Lexer {
     public:
@@ -28,7 +16,7 @@ namespace terse {
       Lexer(std::istream&& stream) : Lexer{stream} {}
 
       // Return next `Token` in buffer.
-      LexerResult<std::unique_ptr<const Token>> next();
+      TokenResult next();
 
     private:
       std::istream& stream_; // Do we really need to keep a ref of this.
