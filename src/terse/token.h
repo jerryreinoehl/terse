@@ -27,7 +27,7 @@ namespace terse {
         None, // Keep this last as it is used for TokenType element count.
       };
 
-      static constexpr std::size_t value_count{static_cast<std::size_t>(None + 1)};
+      static constexpr std::size_t value_count{static_cast<std::size_t>(TokenType::None + 1)};
       static std::vector<std::string_view> names;
       static std::map<std::string_view, TokenType> map;
 
