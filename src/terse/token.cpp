@@ -19,7 +19,10 @@ void TokenType::add(TokenType type, std::string_view name, std::string_view lexe
 }
 
 TokenType TokenType::from_lexeme(std::string_view lexeme) {
-  return TokenType::map[lexeme];
+  if (TokenType::map.count(lexeme) > 0) {
+    return TokenType::map[lexeme];
+  }
+  return TokenType::None;
 }
 
 std::string_view TokenType::to_string() const {
