@@ -1,13 +1,30 @@
 #pragma once
 
+#include <utility>
+
+template <typename V, typename E>
+class expected;
+
 template <typename E>
 class unexpected {
   public:
-    unexpected(const E& error) : error_{error} {}
-    unexpected(E&& error) : error_{std::move(error)} {}
+    explicit unexpected(const E& error) : error_{error} {}
+    explicit unexpected(E&& error) : error_{std::move(error)} {}
 
-    template <typename... Args>
-    unexpected(Args&&... args) : unexpected{E{std::forward<Args>(args)...}} {}
+    explicit unexpected(const unexpected<E>& error) : error_{error.error_} {}
+    explicit unexpected(unexpected<E>&& error) : error_{std::move(error.error_)} {}
+
+    template <typename V>
+    explicit unexpected(const expected<V, E>& error) : error_{error.error()} {}
+
+    template <typename V>
+    explicit unexpected(expected<V, E>&& error) : error_{std::move(error.error_)} {}
+
+    template <
+      typename... Args,
+      typename std::enable_if<std::is_constructible<E, Args...>::value, int >::type = 0
+    >
+    explicit unexpected(Args&&... args) : unexpected{E{std::forward<Args>(args)...}} {}
 
     unexpected& operator=(const unexpected<E>& rhs) {
       if (*this == &rhs) {
@@ -40,9 +57,6 @@ class unexpected {
   private:
     E error_;
 };
-
-template <typename V, typename E>
-class expected;
 
 template <typename T>
 struct expected_traits;
