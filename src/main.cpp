@@ -3,7 +3,6 @@
 #include "args.h"
 #include "terse/lexer.h"
 #include "terse/parser.h"
-#include "terse/token.h"
 
 #include <filesystem>
 #include <fstream>
@@ -16,42 +15,99 @@
 
 namespace fs = std::filesystem;
 
+#include <sstream>
+
 int main(int argc, char **argv) {
+  std::stringstream in{"=> g => git \"test\" { }"};
+  //terse::Lexer lexer{in};
+  std::ifstream f;
+  //f.rdbuf()->pubsetbuf(buf, bufsize);
+  //f.open("/home/jerry/dev/arch/archlinux-2023.05.03-x86_64.iso", std::ifstream::in);
+  f.open("/home/jerry/.config/terse/terse.conf", std::ifstream::in);
+  //f.open("/etc/hosts", std::ifstream::in);
+
+  //terse::Lexer lexer{f};
+
+  //std::unique_ptr<const terse::Token> tok;
+  //while ((tok = lexer.next())->type() != terse::TokenType::STOP) {
+  //  if (tok->type() == terse::TokenType::ERROR) {
+  //    std::cout
+  //      << static_cast<const terse::ErrorToken*>(tok.get())->error()
+  //      << ": line " << tok->line() << ":" << tok->col() << "\n\n";
+  //  } else if (tok->type() == terse::TokenType::STRING) {
+  //    std::cout
+  //      << '"' << static_cast<const terse::StringToken*>(tok.get())->value() << '"'
+  //      << ": line " << tok->line() << ":" << tok->col() << "\n\n";
+  //  } else {
+  //    std::cout << tok->type() << " " << tok->line() << " " << tok->col() << "\n\n";
+  //  }
+  //}
+
   Args args{argc, argv};
 
-  fs::path config{std::getenv("HOME")};
-  config += fs::path{"/.config/terse/terse.conf"};
+  terse::Parser parser{f};
+  terse::TokenMap map = parser.parse().value_or(terse::TokenMap{});
+  std::cout << "command: " << args.command() << '\n';
 
-  std::ifstream in{config, std::ios::ate};
-  std::streampos size = in.tellg();
-  if (size == -1) {
-    fprintf(stderr, "Error opening %s\n", config.c_str());
-    exit(1);
+  for (const auto& pair : map) {
+    std::cout << pair.first << '\n';
   }
 
-  std::unique_ptr<char[]> buf{new char[size]};
-  in.seekg(0, std::ios::beg);
-  in.read(buf.get(), size);
-  in.close();
+  //std::vector<std::string> converted = translate(args.command(), map);
+  //std::cout << "converted: " << converted << '\n';
 
-  terse::Parser parser{buf.get(), static_cast<size_t>(size)};
-  terse::TokenMap map = parser.parse().value_or(terse::TokenMap{});
+  //std::cout << terse::TokenType::from_lexeme("=>") << '\n';
+  //std::cout << terse::TokenType::from_lexeme("(") << '\n';
+  //std::cout << terse::TokenType::from_lexeme(")") << '\n';
+  //std::cout << terse::TokenType::from_lexeme("{") << '\n';
+  //std::cout << terse::TokenType::from_lexeme("}") << '\n';
+  //std::cout << terse::TokenType::from_lexeme("$") << '\n';
+  //std::cout << terse::TokenType::from_lexeme("\"") << '\n';
+  //std::cout << terse::TokenType::from_lexeme("\n") << '\n';
+  //std::cout << terse::TokenType::from_lexeme("cows") << '\n';
 
-  std::vector<std::string> converted = translate(args.command(), map);
+  //terse::WordToken token{"moocow"};
+  //terse::Token t = terse::WordToken{"cat"};
+  //std::cout << "value is " << token.value() << '\n';
+  //std::cout << "type is " << token.type() << '\n';
 
-  if (args.verbose())
-    std::cout << "\e[1;35m==> Executing: " << converted << "\e[0m\n";
+  //f.close();
 
-  int rc;
-  if (args.dry_run())
-    rc = 0;
-  else
-    rc = execute(converted);
+  //Args args{argc, argv};
 
-  if (rc != 0)
-    perror("Error");
+  //fs::path config{std::getenv("HOME")};
+  //config += fs::path{"/.config/terse/terse.conf"};
 
-  return rc;
+  //std::ifstream in{config, std::ios::ate};
+  //std::streampos size = in.tellg();
+  //if (size == -1) {
+  //  fprintf(stderr, "Error opening %s\n", config.c_str());
+  //  exit(1);
+  //}
+
+  //std::unique_ptr<char[]> buf{new char[size]};
+  //in.seekg(0, std::ios::beg);
+  //in.read(buf.get(), size);
+  //in.close();
+
+  //terse::Parser parser{buf.get(), static_cast<size_t>(size)};
+  //terse::TokenMap map = parser.parse().value_or(terse::TokenMap{});
+
+  //std::vector<std::string> converted = translate(args.command(), map);
+
+  //if (args.verbose())
+  //  std::cout << "\e[1;35m==> Executing: " << converted << "\e[0m\n";
+
+  //int rc;
+  //if (args.dry_run())
+  //  rc = 0;
+  //else
+  //  rc = execute(converted);
+
+  //if (rc != 0)
+  //  perror("Error");
+
+  //return rc;
 }
 
 std::vector<std::string> translate(
@@ -76,21 +132,21 @@ std::vector<std::string> translate(
   return converted;
 }
 
-int execute(const std::vector<std::string>& args) {
-  if (args.size() == 0) {
-    errno = EINVAL;
-    return -EINVAL;
-  }
-
-  const char **argv = new const char*[args.size() + 1];
-
-  for (size_t i = 0; i < args.size(); i++)
-    argv[i] = args[i].c_str();
-  argv[args.size()] = nullptr;
-
-  int rc = execvp(argv[0], (char* const*)argv);
-
-  delete [] argv;
-
-  return rc;
-}
+//int execute(const std::vector<std::string>& args) {
+//  if (args.size() == 0) {
+//    errno = EINVAL;
+//    return -EINVAL;
+//  }
+//
+//  const char **argv = new const char*[args.size() + 1];
+//
+//  for (size_t i = 0; i < args.size(); i++)
+//    argv[i] = args[i].c_str();
+//  argv[args.size()] = nullptr;
+//
+//  int rc = execvp(argv[0], (char* const*)argv);
+//
+//  delete [] argv;
+//
+//  return rc;
+//}
