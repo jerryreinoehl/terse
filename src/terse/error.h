@@ -11,6 +11,10 @@ namespace terse {
     public:
       ParseError(int line, int col, std::string message);
 
+      std::string to_string() const noexcept {
+        return std::string{} + std::to_string(line_) + ":" + std::to_string(col_) + " " + message_;
+      }
+
     private:
       int line_;
       int col_;
