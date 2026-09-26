@@ -53,7 +53,9 @@ TokenResult Lexer::next() {
 
   putback();
 
+  std::cout << "lexeme is " << lexeme.str() << '\n';
   TokenType type = TokenType::from_lexeme(lexeme.str());
+  std::cout << "Detected type " << type << '\n';
 
   if (type == TokenType::None) {
     return {std::make_unique<const StringToken>(lexeme.str(), line, col)};

@@ -54,6 +54,7 @@ namespace terse {
 
       char get() noexcept {
         char c = reader_.get();
+        std::cout << "get()'ing " << c << '\n';
 
         if (c == '\n') {
           ++line_;
