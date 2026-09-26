@@ -344,7 +344,7 @@ struct error_propagation_traits<expected<V, E>> {
     return std::forward<V>(v);
   }
 
-  static expected<V, E> from_error(E&& e) {
+  static unexpected<E> from_error(E&& e) {
     return unexpected<E>{std::forward<E>(e)};
   }
 };
