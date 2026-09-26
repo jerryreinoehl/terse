@@ -2,9 +2,6 @@
 
 #include <utility>
 
-template <typename V, typename E>
-class expected;
-
 template <typename E>
 class unexpected {
   public:
@@ -13,12 +10,6 @@ class unexpected {
 
     explicit unexpected(const unexpected<E>& error) : error_{error.error_} {}
     explicit unexpected(unexpected<E>&& error) : error_{std::move(error.error_)} {}
-
-    template <typename V>
-    explicit unexpected(const expected<V, E>& error) : error_{error.error()} {}
-
-    template <typename V>
-    explicit unexpected(expected<V, E>&& error) : error_{std::move(error.error_)} {}
 
     template <
       typename... Args,
@@ -57,6 +48,9 @@ class unexpected {
   private:
     E error_;
 };
+
+template <typename V, typename E>
+class expected;
 
 template <typename T>
 struct expected_traits;
@@ -128,6 +122,10 @@ class expected {
 
     ~expected() {
       destroy();
+    }
+
+    bool has_value() const noexcept {
+      return has_value_;
     }
 
     V& value() & {
