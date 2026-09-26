@@ -9,7 +9,7 @@ license=("MIT")
 makedepends=(gcc)
 options=(strip)
 source=("$pkgname-$pkgver.tar.gz")
-sha256sums=("7355b018e5d4a9b1f3bab6db15d059d46f7255ea49a182086fe8e4a7f725ed25")
+sha256sums=("ea5e3ce5699fa5ed4bae92d1db5f2e674f92c01e9c77f131df80671c3d8da279")
 
 build() {
 	cd "$pkgname-$pkgver"
