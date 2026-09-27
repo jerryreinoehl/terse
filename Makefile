@@ -5,7 +5,15 @@ CC := c++
 CFLAGS := -Wall -Wextra -O2
 TARGET = trs
 #SRCS = $(wildcard src/*.cpp src/**/*.cpp)
-SRCS = src/terse/lexer.cpp src/main.cpp src/terse/token.cpp src/terse/parser.cpp src/terse/emission.cpp src/terse/error.cpp src/args.cpp
+SRCS = src/terse/lexer.cpp \
+	   src/main.cpp \
+	   src/terse/token.cpp \
+	   src/terse/parser.cpp \
+	   src/terse/emission.cpp \
+	   src/terse/error.cpp \
+	   src/terse/grammar.cpp \
+	   src/terse/environment.cpp \
+	   src/args.cpp
 HDRS = $(wildcard src/*.h src/**/*.h)
 OBJS = $(patsubst src/%.cpp, build/%.o, $(SRCS))
 INCS = -Iinclude
