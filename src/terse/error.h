@@ -24,4 +24,6 @@ namespace terse {
   template <typename T>
   using ParseResult = expected<T, ParseError>;
   using TokenResult = ParseResult<std::unique_ptr<const Token>>;
+
+  unexpected<ParseError> invalid_map_source_error(int line, int col);
 }
