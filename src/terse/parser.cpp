@@ -28,7 +28,7 @@ std::optional<TokenMap> Parser::parse() {
   ParseResult<Statements> statements = parse_statements();
   if (!statements) {
     std::cout << "Bad Statements\n";
-    std::cout << std::move(statements).error() << '\n';
+    std::cout << std::move(statements).error().to_string() << '\n';
   }
 
   //do {
