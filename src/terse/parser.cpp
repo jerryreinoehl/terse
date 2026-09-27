@@ -211,6 +211,16 @@ ParseResult<MapStatement> Parser::parse_map_statement() {
 
   target = unwrap(parse_word_expression());
 
+  if (unwrap(peak_ignore_newlines())->type() == TokenType::LeftBrace) {
+    unwrap(next_require_type(TokenType::LeftBrace));
+
+    while (unwrap(peak_ignore_newlines())->type() != TokenType::RightBrace) {
+      statements.add(unwrap(parse_statement()));
+    }
+
+    unwrap(next_require_type(TokenType::RightBrace));
+  }
+
   return MapStatement{source, target, statements};
 }
 
