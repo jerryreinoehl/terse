@@ -181,13 +181,11 @@ ParseResult<Statements> Parser::parse_statements() {
   Statements statements{};
 
   do {
-    auto token = unwrap(peak_ignore_newlines());
-    if (token->type() == TokenType::Stop) {
+    if (unwrap(peak_ignore_newlines())->type() == TokenType::Stop) {
       break;
     }
 
     statements.add(unwrap(parse_statement()));
-
   } while (true);
 
   std::cout << "FINISHED parsing config!!!!!\n";
