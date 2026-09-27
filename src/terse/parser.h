@@ -1,6 +1,7 @@
 #pragma once
 
 #include "emission.h"
+#include "environment.h"
 #include "error.h"
 #include "grammar.h"
 #include "lexer.h"
@@ -8,17 +9,23 @@
 
 #include <memory>
 #include <optional>
+#include <stack>
+#include <string>
 
 namespace terse {
 
   class Parser {
     public:
-      Parser(std::istream& stream) : lexer_{stream} {}
-      Parser(std::istream&& stream) : Parser{stream} {}
+      Parser(std::istream& stream) : lexer_{stream} {
+        maps_.push(&environment_.map());
+      }
       std::optional<TokenMap> parse();
 
     private:
       Lexer lexer_;
+
+      Environment environment_{};
+      std::stack<std::map<std::string, Translation>*> maps_{};
 
       std::unique_ptr<const Token> peak_token_{};
       std::unique_ptr<const Token> putback_token_{};
