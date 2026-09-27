@@ -23,6 +23,9 @@ namespace terse {
       std::unique_ptr<const Token> peak_token_{};
       std::unique_ptr<const Token> putback_token_{};
 
+      int line_{};
+      int col_{};
+
       TokenResult next();
       TokenResult next_ignore_newlines();
 

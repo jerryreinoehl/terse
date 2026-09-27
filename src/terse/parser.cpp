@@ -101,6 +101,8 @@ TokenResult Parser::next() {
   ///
   if (result) {
     std::cout << "Reading: " << result->get()->type() << '\n';
+    line_ = result->get()->line();
+    col_ = result->get()->col();
     return std::move(*result);
   } else {
     std::cout << "Error getting result from lexer\n";
@@ -148,6 +150,8 @@ ParseResult<const Token*> Parser::peak() {
   }
 
   std::cout << "Peaking:: " << peak_token_->type() << '\n';
+  line_ = peak_token_->line();
+  col_ = peak_token_->col();
   return peak_token_.get();
 }
 
@@ -172,6 +176,8 @@ ParseResult<const Token*> Parser::peak_ignore_newlines() {
     }
   } while (true);
 
+  line_ = peak_token_->line();
+  col_ = peak_token_->col();
   return peak_token_.get();
 }
 
