@@ -219,5 +219,14 @@ ParseResult<MapStatement> Parser::parse_map_statement() {
 ParseResult<WordExpression> Parser::parse_word_expression() {
   std::cout << "[] parse_word_statement\n";
 
-  return WordExpression{};
+  WordExpression expression;
+
+  do {
+    if (unwrap(peak())->type() != TokenType::String) {
+      break;
+    }
+    expression.add(unwrap(next())->as<StringToken>().value());
+  } while (true);
+
+  return expression;
 }
