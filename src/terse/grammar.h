@@ -28,6 +28,8 @@ namespace terse {
       void add(const std::string& word);
       size_t size() const noexcept;
 
+      const std::vector<std::string> words() const noexcept;
+
       const std::string& operator[](size_t index) const;
       const std::string& operator[](idx::last_t) const;
 

@@ -14,6 +14,10 @@ size_t WordExpression::size() const noexcept {
   return words_.size();
 }
 
+const std::vector<std::string> WordExpression::words() const noexcept {
+  return words_;
+}
+
 const std::string& WordExpression::operator[](size_t index) const {
   return words_.at(index);
 }
