@@ -40,7 +40,6 @@ namespace terse {
       ParseResult<Statement> parse_statement();
       ParseResult<MapStatement> parse_map_statement();
       ParseResult<WordExpression> parse_word_expression();
-      //ParseResult<WordExpression> parse_word_expression();
   };
 
 }
