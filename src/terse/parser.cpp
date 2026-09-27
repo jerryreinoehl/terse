@@ -212,6 +212,10 @@ ParseResult<MapStatement> Parser::parse_map_statement() {
   Statements statements;
 
   source = unwrap(parse_word_expression());
+  // `source` must contain one and only one word to be valid.
+  if (source.size() != 1) {
+    return unexpected<ParseError>{line_, col_, "Source must be a single word"};
+  }
 
   unwrap(next_require_type(TokenType::Arm));
 
