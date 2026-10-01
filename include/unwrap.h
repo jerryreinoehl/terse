@@ -3,7 +3,7 @@
 #include <type_traits>
 #include <utility>
 
-template <typename T>
+template <typename T, typename = void>
 struct error_propagation_traits {};
 
 #define UNWRAP_PROPAGATE(EXPR)                                                             \
