@@ -8,8 +8,8 @@ class unexpected {
     explicit unexpected(const E& error) : error_{error} {}
     explicit unexpected(E&& error) : error_{std::move(error)} {}
 
-    explicit unexpected(const unexpected<E>& error) : error_{error.error_} {}
-    explicit unexpected(unexpected<E>&& error) : error_{std::move(error.error_)} {}
+    unexpected(const unexpected<E>& error) : error_{error.error_} {}
+    unexpected(unexpected<E>&& error) : error_{std::move(error.error_)} {}
 
     template <
       typename... Args,
