@@ -13,7 +13,7 @@ class unexpected {
 
     template <
       typename... Args,
-      typename std::enable_if<std::is_constructible<E, Args...>::value, int >::type = 0
+      typename std::enable_if<std::is_constructible<E, Args...>::value, int>::type = 0
     >
     explicit unexpected(Args&&... args) : unexpected{E{std::forward<Args>(args)...}} {}
 
