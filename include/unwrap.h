@@ -33,3 +33,26 @@ struct error_propagation_traits {};
 #define UNWRAP_GET_MACRO(_1, _2, NAME, ...) NAME
 
 #define unwrap(...) UNWRAP_GET_MACRO(__VA_ARGS__, UNWRAP_FALLBACK, UNWRAP_PROPAGATE)(__VA_ARGS__)
+
+template <typename T>
+struct error_propagation_traits<T, typename std::enable_if<std::is_convertible<T, bool>::value>::type> {
+  static bool has_value(const T& t) {
+    return static_cast<bool>(t);
+  }
+
+  static T extract_value(const T& t) {
+    return t;
+  }
+
+  static T extract_error(const T& t) {
+    return t;
+  }
+
+  static T from_value(T&& t) {
+    return std::forward<T>(t);
+  }
+
+  static T from_error(T&& t) {
+    return std::forward<T>(t);
+  }
+};
