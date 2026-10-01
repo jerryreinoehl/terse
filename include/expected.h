@@ -323,11 +323,11 @@ class expected {
     }
 };
 
-template <typename T>
+template <typename T, typename>
 struct error_propagation_traits;
 
 template <typename V, typename E>
-struct error_propagation_traits<expected<V, E>> {
+struct error_propagation_traits<expected<V, E>, void> {
   static bool has_value(const expected<V, E>& t) {
     return t.has_value();
   }
