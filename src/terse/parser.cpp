@@ -193,6 +193,10 @@ ParseResult<Statements> Parser::parse_statements() {
 ParseResult<Statement> Parser::parse_statement() {
   std::cout << "[] parse_statement\n";
 
+  std::unique_ptr<const Token> token = unwrap(next_require_type(TokenType::String));
+  unwrap(unwrap(peak())->type() == TokenType::Arm, malformed_statement_error(line_, col_));
+  putback(std::move(token));
+
   return unwrap(parse_map_statement());
 }
 

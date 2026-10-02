@@ -27,4 +27,5 @@ namespace terse {
 
   unexpected<ParseError> invalid_map_source_error(int line, int col);
   unexpected<ParseError> unexpected_token_error(int line, int col, TokenType expected, TokenType actual);
+  unexpected<ParseError> malformed_statement_error(int line, int col);
 }

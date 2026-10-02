@@ -18,3 +18,7 @@ unexpected<ParseError> terse::unexpected_token_error(int line, int col, TokenTyp
       + " but got " + std::string{actual.to_string()}
   }};
 }
+
+unexpected<ParseError> terse::malformed_statement_error(int line, int col) {
+  return unexpected{ParseError{line, col, "Malformed statement"}};
+}
