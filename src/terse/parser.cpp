@@ -212,9 +212,7 @@ ParseResult<MapStatement> Parser::parse_map_statement() {
 
   source = unwrap(parse_word_expression());
   // `source` must contain one and only one word to be valid.
-  if (source.size() != 1) {
-    return invalid_map_source_error(line_, col_);
-  }
+  unwrap(source.size() != 1, invalid_map_source_error(line_, col_));
 
   unwrap(next_require_type(TokenType::Arm));
 
