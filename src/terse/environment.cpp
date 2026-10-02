@@ -2,6 +2,7 @@
 
 using terse::Environment;
 using terse::Translation;
+using terse::TranslationMap;
 
 Translation& Translation::operator=(const Translation& other) {
   if (this == &other) {
@@ -25,18 +26,22 @@ Translation& Translation::operator=(Translation&& other) {
   return *this;
 }
 
-const std::map<std::string, Translation>& Translation::map() const noexcept {
+const TranslationMap& Translation::map() const noexcept {
   return map_;
 }
 
-std::map<std::string, Translation>& Translation::map() noexcept {
+TranslationMap& Translation::map() noexcept {
   return map_;
 }
 
-const std::map<std::string, Translation>& Environment::map() const noexcept {
+const TranslationMap& Environment::map() const noexcept {
   return map_;
 }
 
-std::map<std::string, Translation>& Environment::map() noexcept {
+TranslationMap& Environment::map() noexcept {
   return map_;
+}
+
+void Environment::add_translation(const std::string& source, const std::vector<std::string>& target) {
+  map_[source] = Translation{target};
 }
