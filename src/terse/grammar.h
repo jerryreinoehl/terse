@@ -33,6 +33,8 @@ namespace terse {
       const std::string& operator[](size_t index) const;
       const std::string& operator[](idx::last_t) const;
 
+      const std::string& first() const noexcept;
+
     private:
       std::vector<std::string> words_;
   };

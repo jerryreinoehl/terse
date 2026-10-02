@@ -26,6 +26,10 @@ const std::string& WordExpression::operator[](idx::last_t) const {
   return words_.at(words_.size()-1);
 }
 
+const std::string& WordExpression::first() const noexcept {
+  return words_[0];
+}
+
 void Statements::add(const Statement& statement) {
   statements_.push_back(statement);
 }
