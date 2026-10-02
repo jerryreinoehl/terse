@@ -122,14 +122,7 @@ TokenResult Parser::next_ignore_newlines() {
 TokenResult Parser::next_require_type(TokenType type) {
   auto token = unwrap(next_ignore_newlines());
 
-  if (token->type() != type) {
-    return unexpected<ParseError>{
-      token->line(),
-      token->col(),
-      "Expected token of type " + std::string{type.to_string()} +
-      " but got " + std::string{token->type().to_string()},
-    };
-  }
+  unwrap(token->type() == type, unexpected_token_error(line_, col_, type, token->type()));
 
   return token;
 }

@@ -26,4 +26,5 @@ namespace terse {
   using TokenResult = ParseResult<std::unique_ptr<const Token>>;
 
   unexpected<ParseError> invalid_map_source_error(int line, int col);
+  unexpected<ParseError> unexpected_token_error(int line, int col, TokenType expected, TokenType actual);
 }
