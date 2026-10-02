@@ -211,16 +211,12 @@ ParseResult<MapStatement> Parser::parse_map_statement() {
 
   target = unwrap(parse_word_expression());
 
-  maps_.top()->emplace(source[0], Translation{std::move(target.words())});
-  // environment.add_translation(source, target);
-  // Map* map = environment.add_translation(source, target);
+  Translation& translation = environment_.add_translation(source.first(), target.words());
 
   if (unwrap(peak_ignore_newlines())->type() == TokenType::LeftBrace) {
     unwrap(next_require_type(TokenType::LeftBrace));
 
-    maps_.push(&maps_.top()->at(source[0]).map());
-    // environment.push_map(source);
-    // environment.push_map(map);
+    environment_.push_map(translation.map());
 
     while (unwrap(peak_ignore_newlines())->type() != TokenType::RightBrace) {
       statements.add(unwrap(parse_statement()));
@@ -228,8 +224,7 @@ ParseResult<MapStatement> Parser::parse_map_statement() {
 
     unwrap(next_require_type(TokenType::RightBrace));
 
-    maps_.pop();
-    // environment.pop_map();
+    environment_.pop_map();
   }
 
   return MapStatement{source, target, statements};

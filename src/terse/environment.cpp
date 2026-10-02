@@ -35,13 +35,23 @@ TranslationMap& Translation::map() noexcept {
 }
 
 const TranslationMap& Environment::map() const noexcept {
-  return map_;
+  return global_map_;
 }
 
 TranslationMap& Environment::map() noexcept {
-  return map_;
+  return global_map_;
 }
 
-void Environment::add_translation(const std::string& source, const std::vector<std::string>& target) {
-  map_[source] = Translation{target};
+Translation& Environment::add_translation(const std::string& source, const std::vector<std::string>& target) {
+  map_->emplace(source, Translation{target});
+  return map_->at(source);
+}
+
+void Environment::push_map(TranslationMap& map) {
+  maps_.push(&map);
+  map_ = maps_.top();
+}
+
+void Environment::pop_map() {
+  maps_.pop();
 }

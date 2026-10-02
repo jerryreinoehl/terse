@@ -35,10 +35,13 @@ namespace terse {
       const TranslationMap& map() const noexcept;
       TranslationMap& map() noexcept;
 
-      void add_translation(const std::string& source, const std::vector<std::string>& target);
+      Translation& add_translation(const std::string& source, const std::vector<std::string>& target);
+      void push_map(TranslationMap& map);
+      void pop_map();
 
     private:
-      TranslationMap map_{};
+      TranslationMap global_map_{};
+      TranslationMap *map_{&global_map_};
       std::stack<TranslationMap*> maps_{};
   };
 
