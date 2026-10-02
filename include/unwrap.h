@@ -36,23 +36,23 @@ struct error_propagation_traits {};
 
 template <typename T>
 struct error_propagation_traits<T, typename std::enable_if<std::is_convertible<T, bool>::value>::type> {
-  static bool has_value(const T& t) {
+  static constexpr bool has_value(const T& t) noexcept {
     return static_cast<bool>(t);
   }
 
-  static T extract_value(const T& t) {
+  static constexpr T extract_value(const T& t) noexcept {
     return t;
   }
 
-  static T extract_error(const T& t) {
+  static constexpr T extract_error(const T& t) noexcept {
     return t;
   }
 
-  static T from_value(T&& t) {
+  static constexpr T from_value(T&& t) noexcept {
     return std::forward<T>(t);
   }
 
-  static T from_error(T&& t) {
+  static constexpr T from_error(T&& t) noexcept {
     return std::forward<T>(t);
   }
 };
