@@ -151,13 +151,13 @@ ParseResult<const Token*> Parser::peak_ignore_newlines() {
   if (putback_token_ && putback_token_->type() != TokenType::Newline) {
     return putback_token_.get();
   } else {
-    putback_token_ = std::unique_ptr<const Token>{};
+    putback_token_.reset();
   }
 
   if (peak_token_ && peak_token_->type() != TokenType::Newline) {
     return peak_token_.get();
   } else {
-    peak_token_ = std::unique_ptr<const Token>{};
+    peak_token_.reset();
   }
 
   do {
