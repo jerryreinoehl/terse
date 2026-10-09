@@ -17,6 +17,10 @@
 #include <sstream>
 
 int main(int argc, char **argv) {
+  // Try to get terse config in this order:
+  //   1. $TERSE_CONFIG
+  //   2. $XDG_CONFIG_HOME/terse/terse.conf
+  //   3. $HOME/.config/terse/terse.conf
   std::string config = os::env::expand("${TERSE_CONFIG:-${XDG_CONFIG_HOME:-$HOME/.config}/terse/terse.conf}");
 
   std::ifstream f;
