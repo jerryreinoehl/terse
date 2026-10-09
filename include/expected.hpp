@@ -93,10 +93,7 @@ class expected {
       new (&storage_.value) V{std::move(value)};
     }
 
-    template <
-      typename... Args,
-      typename std::enable_if<std::is_constructible<V, Args...>::value, int>::type = 0
-    >
+    template <typename... Args>
     expected(Args&&... args) : expected{V{std::forward<Args>(args)...}} {}
 
     expected(const expected<V, E>& expected) : has_value_{expected.has_value_} {
