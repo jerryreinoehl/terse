@@ -13,7 +13,8 @@ SRCS = src/terse/lexer.cpp \
 	   src/terse/error.cpp \
 	   src/terse/grammar.cpp \
 	   src/terse/environment.cpp \
-	   src/args.cpp
+	   src/args.cpp \
+	   src/os.cpp
 HDRS = $(wildcard src/*.h src/**/*.h)
 OBJS = $(patsubst src/%.cpp, build/%.o, $(SRCS))
 INCS = -Iinclude

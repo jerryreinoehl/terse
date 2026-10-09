@@ -3,6 +3,7 @@
 #include "args.h"
 #include "terse/lexer.h"
 #include "terse/parser.h"
+#include "os.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -13,17 +14,13 @@
 
 #include <unistd.h>
 
-namespace fs = std::filesystem;
-
 #include <sstream>
 
 int main(int argc, char **argv) {
-  std::stringstream in{"=> g => git \"test\" { }"};
-  //terse::Lexer lexer{in};
+  std::string config = os::env::expand("${TERSE_CONFIG:-${XDG_CONFIG_HOME:-$HOME/.config}/terse/terse.conf}");
+
   std::ifstream f;
-  //f.rdbuf()->pubsetbuf(buf, bufsize);
-  //f.open("/home/jerry/dev/arch/archlinux-2023.05.03-x86_64.iso", std::ifstream::in);
-  f.open("/home/jerry/.config/terse/terse.conf", std::ifstream::in);
+  f.open(config, std::ifstream::in);
   //f.open("/etc/hosts", std::ifstream::in);
 
   //terse::Lexer lexer{f};
