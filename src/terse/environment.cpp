@@ -59,3 +59,13 @@ inline void Environment::push_map(TranslationMap& map) {
 inline void Environment::pop_map() {
   maps_.pop();
 }
+
+std::vector<std::string> Environment::translate(const std::vector<std::string>& args) const noexcept {
+  std::vector<std::string> translated{args.size()};
+
+  for (auto& arg : args) {
+
+  }
+
+  return translated;
+}
