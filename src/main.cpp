@@ -54,47 +54,8 @@ int main(int argc, char **argv) {
     std::cout << pair.first << '\n';
   }
 
-  //std::vector<std::string> converted = translate(args.command(), map);
-  //std::cout << "converted: " << converted << '\n';
 
-  //std::cout << terse::TokenType::from_lexeme("=>") << '\n';
-  //std::cout << terse::TokenType::from_lexeme("(") << '\n';
-  //std::cout << terse::TokenType::from_lexeme(")") << '\n';
-  //std::cout << terse::TokenType::from_lexeme("{") << '\n';
-  //std::cout << terse::TokenType::from_lexeme("}") << '\n';
-  //std::cout << terse::TokenType::from_lexeme("$") << '\n';
-  //std::cout << terse::TokenType::from_lexeme("\"") << '\n';
-  //std::cout << terse::TokenType::from_lexeme("\n") << '\n';
-  //std::cout << terse::TokenType::from_lexeme("cows") << '\n';
-
-  //terse::WordToken token{"moocow"};
-  //terse::Token t = terse::WordToken{"cat"};
-  //std::cout << "value is " << token.value() << '\n';
-  //std::cout << "type is " << token.type() << '\n';
-
-  //f.close();
-
-  //Args args{argc, argv};
-
-  //fs::path config{std::getenv("HOME")};
-  //config += fs::path{"/.config/terse/terse.conf"};
-
-  //std::ifstream in{config, std::ios::ate};
-  //std::streampos size = in.tellg();
-  //if (size == -1) {
-  //  fprintf(stderr, "Error opening %s\n", config.c_str());
-  //  exit(1);
-  //}
-
-  //std::unique_ptr<char[]> buf{new char[size]};
-  //in.seekg(0, std::ios::beg);
-  //in.read(buf.get(), size);
-  //in.close();
-
-  //terse::Parser parser{buf.get(), static_cast<size_t>(size)};
-  //terse::TokenMap map = parser.parse().value_or(terse::TokenMap{});
-
-  //std::vector<std::string> converted = translate(args.command(), map);
+  f.close();
 
   //if (args.verbose())
   //  std::cout << "\e[1;35m==> Executing: " << converted << "\e[0m\n";
