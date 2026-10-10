@@ -22,6 +22,8 @@ namespace terse {
       Translation& operator=(const Translation& other);
       Translation& operator=(Translation&& other);
 
+      const std::vector<std::string>& target() const noexcept;
+
       const TranslationMap& map() const noexcept;
       TranslationMap& map() noexcept;
 

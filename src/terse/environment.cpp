@@ -4,6 +4,10 @@ using terse::Environment;
 using terse::Translation;
 using terse::TranslationMap;
 
+//*****************************************************************************
+// struct Translation
+//*****************************************************************************
+
 Translation& Translation::operator=(const Translation& other) {
   if (this == &other) {
     return *this;
@@ -24,6 +28,10 @@ Translation& Translation::operator=(Translation&& other) {
   map_ = std::move(other.map_);
 
   return *this;
+}
+
+const std::vector<std::string>& Translation::target() const noexcept {
+  return target_;
 }
 
 const TranslationMap& Translation::map() const noexcept {
