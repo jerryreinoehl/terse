@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 
   std::cout << "translated: ";
   for (auto& word : translated) {
-    std::cout << word << ' ';
+    std::cout << "'" << word << "'" << ' ';
   }
   std::cout << '\n';
 
