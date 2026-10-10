@@ -53,6 +53,18 @@ int main(int argc, char **argv) {
   std::vector<std::string> to_translate{"sv", "t", "dhcpcd.service"};
   std::vector<std::string> translated = environment.translate(to_translate);
 
+  std::cout << "to_translate: ";
+  for (auto& word : to_translate) {
+    std::cout << word << ' ';
+  }
+  std::cout << '\n';
+
+  std::cout << "translated: ";
+  for (auto& word : translated) {
+    std::cout << word << ' ';
+  }
+  std::cout << '\n';
+
   f.close();
 
   //if (args.verbose())
