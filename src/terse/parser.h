@@ -21,6 +21,8 @@ namespace terse {
       }
       std::optional<TokenMap> parse();
 
+      const Environment& environment() const noexcept;
+
     private:
       Lexer lexer_;
 

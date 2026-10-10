@@ -48,12 +48,7 @@ int main(int argc, char **argv) {
 
   terse::Parser parser{f};
   terse::TokenMap map = parser.parse().value_or(terse::TokenMap{});
-  std::cout << "command: " << args.command() << '\n';
-
-  for (const auto& pair : map) {
-    std::cout << pair.first << '\n';
-  }
-
+  terse::Environment environment = parser.environment();
 
   f.close();
 

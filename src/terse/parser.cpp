@@ -4,15 +4,16 @@
 #include <memory>
 #include <stack>
 
+using terse::Environment;
+using terse::MapStatement;
+using terse::ParseResult;
 using terse::Parser;
+using terse::Statement;
+using terse::Statements;
 using terse::StringToken;
 using terse::Token;
 using terse::TokenMap;
 using terse::TokenResult;
-using terse::ParseResult;
-using terse::Statements;
-using terse::Statement;
-using terse::MapStatement;
 using terse::WordExpression;
 
 std::optional<TokenMap> Parser::parse() {
@@ -85,6 +86,10 @@ std::optional<TokenMap> Parser::parse() {
   //} while (tok->type() != TokenType::Stop);
 
   return map;
+}
+
+inline const Environment& Parser::environment() const noexcept {
+  return environment_;
 }
 
 TokenResult Parser::next() {
