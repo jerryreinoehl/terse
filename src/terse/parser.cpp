@@ -88,7 +88,7 @@ std::optional<TokenMap> Parser::parse() {
   return map;
 }
 
-inline const Environment& Parser::environment() const noexcept {
+const Environment& Parser::environment() const noexcept {
   return environment_;
 }
 
