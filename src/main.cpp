@@ -1,20 +1,15 @@
 #include "main.h"
 
 #include "args.h"
-#include "terse/lexer.h"
 #include "terse/parser.h"
 #include "os.hpp"
 
-#include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <memory>
 #include <string>
 #include <vector>
 
 #include <unistd.h>
-
-#include <sstream>
 
 int main(int argc, char **argv) {
   // Try to get terse config in this order:
