@@ -1,6 +1,5 @@
 #pragma once
 
-#include "emission.h"
 #include "environment.h"
 #include "error.h"
 #include "grammar.h"
@@ -8,9 +7,6 @@
 #include "token.h"
 
 #include <memory>
-#include <optional>
-#include <stack>
-#include <string>
 
 namespace terse {
 

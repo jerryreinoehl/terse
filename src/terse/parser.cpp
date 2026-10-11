@@ -1,8 +1,6 @@
 #include "parser.h"
 #include "unwrap.hpp"
 
-#include <memory>
-
 using terse::Environment;
 using terse::MapStatement;
 using terse::ParseResult;
@@ -11,7 +9,6 @@ using terse::Statement;
 using terse::Statements;
 using terse::StringToken;
 using terse::Token;
-using terse::TokenMap;
 using terse::TokenResult;
 using terse::WordExpression;
 
