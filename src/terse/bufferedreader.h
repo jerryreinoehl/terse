@@ -15,25 +15,45 @@ namespace terse {
       BufferedReader& operator=(const BufferedReader& other) = delete;
       BufferedReader& operator=(BufferedReader&& other);
 
+      // Get a character from the buffer. If the buffer is empty than fill the
+      // buffer by reading from the `stream` this reader was constructed with.
+      // Returns `EOF` if there are no more characters in the buffer or stream.
       char get();
 
+      // "Puts back" a character by decrementing the pointer into the buffer.
+      // This is only guaranteed to work once after a call to `get()`.
       void putback() noexcept;
 
+      // Returns `true` if there are no more characters in the buffer or
+      // stream.
       bool eof() const noexcept;
 
+      // Assigned `c` the next character read from the reader.
       BufferedReader& operator>>(char& c);
 
     private:
+      // The input stream this reader reads from.
       std::istream* stream_;
 
+      // The size of buffer. This many characters are read from `stream_` at a
+      // time.
       size_t size_{};
 
+      // `buf_` points to the beginning of the buffer.
+      // `cur_` points to the next character to be read.
+      // `end_` points to the end of the filled buffered.
       char *buf_{};
       char *cur_{};
       char *end_{};
 
+      // `true` if there are no more bytes to read from `stream_`.
       bool eof_{false};
 
+      // Reads `size_` bytes from `stream_` into `buf_`.
+      // Updates `cur_` to the beginning of buffer, `buf_` and updates `end_`
+      // to the end of filled buffer.
+      // Sets `eof_` to `true` if there are no more bytes to read from
+      // `stream_`.
       void readmore();
   };
 
