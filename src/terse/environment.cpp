@@ -60,11 +60,12 @@ Translation& Environment::add_translation(const std::string& source, const std::
 }
 
 void Environment::push_map(TranslationMap& map) {
-  maps_.push(&map);
-  map_ = maps_.top();
+  maps_.push(map_);
+  map_ = &map;
 }
 
 void Environment::pop_map() {
+  map_ = maps_.top();
   maps_.pop();
 }
 
