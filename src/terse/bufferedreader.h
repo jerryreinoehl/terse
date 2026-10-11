@@ -17,7 +17,7 @@ namespace terse {
 
       char get();
 
-      void putback();
+      void putback() noexcept;
 
       bool eof() const noexcept;
 
@@ -98,7 +98,7 @@ inline char terse::BufferedReader::get() {
   return *cur_++;
 }
 
-inline void terse::BufferedReader::putback() {
+inline void terse::BufferedReader::putback() noexcept {
   if (cur_ > buf_) {
     --cur_;
   }
