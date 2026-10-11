@@ -50,11 +50,14 @@ int main(int argc, char **argv) {
   terse::TokenMap map = parser.parse().value_or(terse::TokenMap{});
   terse::Environment environment = parser.environment();
 
-  std::vector<std::string> to_translate{"sv", "t", "dhcpcd.service"};
-  std::vector<std::string> translated = environment.translate(to_translate);
+  for (const auto& pair : environment.map()) {
+    std::cout << "key: " << pair.first << '\n';
+  }
 
-  std::cout << "to_translate: ";
-  for (auto& word : to_translate) {
+  std::vector<std::string> translated = environment.translate(args.command());
+
+  std::cout << "command: ";
+  for (const auto& word : args.command()) {
     std::cout << word << ' ';
   }
   std::cout << '\n';
