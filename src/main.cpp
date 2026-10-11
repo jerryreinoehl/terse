@@ -51,17 +51,20 @@ int main(int argc, char **argv) {
 
   f.close();
 
-  if (args.verbose())
+  if (args.verbose()) {
     std::cout << "\e[1;35m==> Executing: " << translated << "\e[0m\n";
+  }
 
   int rc;
-  if (args.dry_run())
+  if (args.dry_run()) {
     rc = 0;
-  else
+  } else {
     rc = execute(translated);
+  }
 
-  if (rc != 0)
+  if (rc != 0) {
     perror("Error");
+  }
 
   return rc;
 }
@@ -74,8 +77,9 @@ int execute(const std::vector<std::string>& args) {
 
   const char **argv = new const char*[args.size() + 1];
 
-  for (size_t i = 0; i < args.size(); i++)
+  for (size_t i = 0; i < args.size(); i++) {
     argv[i] = args[i].c_str();
+  }
   argv[args.size()] = nullptr;
 
   int rc = execvp(argv[0], (char* const*)argv);
