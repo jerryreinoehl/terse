@@ -55,23 +55,29 @@ namespace terse {
       // Sets `eof_` to `true` if there are no more bytes to read from
       // `stream_`.
       void readmore();
+
+      // Returns a size that is aligned such that is suitable for
+      // `aligned-alloc`.
+      // The returned size will be a power of two greater than
+      // `x` and a multiple of `sizeof(void*)`.
+      constexpr size_t align(size_t x);
   };
 
 }
-
 
 //*****************************************************************************
 // struct BufferedReader
 //*****************************************************************************
 
 inline terse::BufferedReader::BufferedReader(std::istream& stream, size_t size)
-  : stream_{&stream}, size_{size}
+  : stream_{&stream}, size_{align(size)}
 {
-  cur_ = end_ = buf_ = new char[size_];
+  void *mem = aligned_alloc(size_, size_ * sizeof(char));
+  cur_ = end_ = buf_ = static_cast<char*>(mem);
 }
 
 inline terse::BufferedReader::BufferedReader(BufferedReader&& other) {
-  delete [] buf_;
+  std::free(buf_);
 
   stream_ = other.stream_;
   size_ = other.size_;
@@ -84,7 +90,7 @@ inline terse::BufferedReader::BufferedReader(BufferedReader&& other) {
 }
 
 inline terse::BufferedReader::~BufferedReader() {
-  delete [] buf_;
+  std::free(buf_);
   buf_ = cur_ = end_ = nullptr;
 }
 
@@ -93,7 +99,7 @@ inline terse::BufferedReader& terse::BufferedReader::operator=(BufferedReader&& 
     return *this;
   }
 
-  delete [] buf_;
+  std::free(buf_);
 
   stream_ = other.stream_;
   size_ = other.size_;
@@ -142,4 +148,11 @@ inline void terse::BufferedReader::readmore() {
   if (bytes_read == 0) {
     eof_ = true;
   }
+}
+
+inline constexpr size_t terse::BufferedReader::align(size_t x) {
+  constexpr size_t max{4096 * 8};
+  size_t pow{sizeof(void*)};
+  for (; pow < x && pow <= max; pow <<= 1);
+  return pow;
 }
