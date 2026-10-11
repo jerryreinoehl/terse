@@ -25,24 +25,6 @@ int main(int argc, char **argv) {
 
   std::ifstream f;
   f.open(config, std::ifstream::in);
-  //f.open("/etc/hosts", std::ifstream::in);
-
-  //terse::Lexer lexer{f};
-
-  //std::unique_ptr<const terse::Token> tok;
-  //while ((tok = lexer.next())->type() != terse::TokenType::STOP) {
-  //  if (tok->type() == terse::TokenType::ERROR) {
-  //    std::cout
-  //      << static_cast<const terse::ErrorToken*>(tok.get())->error()
-  //      << ": line " << tok->line() << ":" << tok->col() << "\n\n";
-  //  } else if (tok->type() == terse::TokenType::STRING) {
-  //    std::cout
-  //      << '"' << static_cast<const terse::StringToken*>(tok.get())->value() << '"'
-  //      << ": line " << tok->line() << ":" << tok->col() << "\n\n";
-  //  } else {
-  //    std::cout << tok->type() << " " << tok->line() << " " << tok->col() << "\n\n";
-  //  }
-  //}
 
   Args args{argc, argv};
 
