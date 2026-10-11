@@ -22,13 +22,17 @@ namespace terse {
       const Environment& environment() const noexcept;
 
     private:
+      // The lexer from which token are read.
       Lexer lexer_;
 
+      // The environment being constructed during parsing.
       Environment environment_{};
 
+      // Holds tokens for `peak`ing and `putback`.
       std::unique_ptr<const Token> peak_token_{};
       std::unique_ptr<const Token> putback_token_{};
 
+      // Current line and col as obtained from last read token.
       int line_{};
       int col_{};
 
