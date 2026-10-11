@@ -66,28 +66,6 @@ int main(int argc, char **argv) {
   return rc;
 }
 
-std::vector<std::string> translate(
-  const std::vector<std::string>& args, const terse::TokenMap& map
-) {
-  std::vector<std::string> converted;
-  terse::TokenMap tm = map;
-
-  for (const auto& arg : args) {
-    auto it = tm.find(arg);
-
-    if (it != tm.end()) {
-      for (const auto& token : it->second.tokens()) {
-        converted.push_back(token);
-      }
-      tm = it->second.map().value_or(tm);
-    } else {
-      converted.push_back(arg);
-    }
-  }
-
-  return converted;
-}
-
 int execute(const std::vector<std::string>& args) {
   if (args.size() == 0) {
     errno = EINVAL;
