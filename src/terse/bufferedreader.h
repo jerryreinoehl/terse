@@ -7,8 +7,13 @@ namespace terse {
   struct BufferedReader {
     public:
       BufferedReader(std::istream& stream, size_t size = 4096);
+      BufferedReader(const BufferedReader& other) = delete;
+      BufferedReader(BufferedReader&& other);
 
       ~BufferedReader();
+
+      BufferedReader& operator=(const BufferedReader& other) = delete;
+      BufferedReader& operator=(BufferedReader&& other);
 
       char get();
 
@@ -19,7 +24,7 @@ namespace terse {
       BufferedReader& operator>>(char& c);
 
     private:
-      std::istream& stream_;
+      std::istream* stream_;
 
       size_t size_{};
 
@@ -40,14 +45,46 @@ namespace terse {
 //*****************************************************************************
 
 inline terse::BufferedReader::BufferedReader(std::istream& stream, size_t size)
-  : stream_{stream}, size_{size}
+  : stream_{&stream}, size_{size}
 {
   cur_ = end_ = buf_ = new char[size_];
+}
+
+inline terse::BufferedReader::BufferedReader(BufferedReader&& other) {
+  delete [] buf_;
+
+  stream_ = other.stream_;
+  size_ = other.size_;
+  buf_ = other.buf_;
+  cur_ = other.cur_;
+  end_ = other.end_;
+  eof_ = other.eof_;
+
+  other.cur_ = other.end_ = other.buf_ = nullptr;
 }
 
 inline terse::BufferedReader::~BufferedReader() {
   delete [] buf_;
   buf_ = cur_ = end_ = nullptr;
+}
+
+inline terse::BufferedReader& terse::BufferedReader::operator=(BufferedReader&& other) {
+  if (this == &other) {
+    return *this;
+  }
+
+  delete [] buf_;
+
+  stream_ = other.stream_;
+  size_ = other.size_;
+  buf_ = other.buf_;
+  cur_ = other.cur_;
+  end_ = other.end_;
+  eof_ = other.eof_;
+
+  other.cur_ = other.end_ = other.buf_ = nullptr;
+
+  return *this;
 }
 
 inline char terse::BufferedReader::get() {
@@ -77,7 +114,7 @@ inline terse::BufferedReader& terse::BufferedReader::operator>>(char& c) {
 }
 
 inline void terse::BufferedReader::readmore() {
-  int bytes_read = stream_.readsome(buf_, size_);
+  int bytes_read = stream_->readsome(buf_, size_);
 
   cur_ = buf_;
   end_ = buf_ + bytes_read;
