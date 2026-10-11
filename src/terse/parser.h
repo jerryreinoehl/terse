@@ -19,7 +19,8 @@ namespace terse {
       Parser(std::istream& stream) : lexer_{stream} {
         maps_.push(&environment_.map());
       }
-      std::optional<TokenMap> parse();
+
+      ParseResult<const Environment*> parse();
 
       const Environment& environment() const noexcept;
 

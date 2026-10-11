@@ -16,22 +16,9 @@ using terse::TokenMap;
 using terse::TokenResult;
 using terse::WordExpression;
 
-std::optional<TokenMap> Parser::parse() {
-  std::stack<TokenMap> maps;
-  std::stack<std::string> emissions;
-  TokenMap map;
-  std::unique_ptr<const Token> tok;
-  std::string src;
-  std::vector<std::string> tokens;
-  Emission emission;
-
-  ParseResult<Statements> statements = parse_statements();
-  if (!statements) {
-    std::cout << "Bad Statements\n";
-    std::cout << std::move(statements).error().to_string() << '\n';
-  }
-
-  return map;
+ParseResult<const Environment*> Parser::parse() {
+  unwrap(parse_statements());
+  return &environment_;
 }
 
 const Environment& Parser::environment() const noexcept {

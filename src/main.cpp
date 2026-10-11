@@ -24,8 +24,12 @@ int main(int argc, char **argv) {
   Args args{argc, argv};
 
   terse::Parser parser{f};
-  terse::TokenMap map = parser.parse().value_or(terse::TokenMap{});
-  terse::Environment environment = parser.environment();
+  terse::ParseResult<const terse::Environment*> result = parser.parse();
+  if (!result) {
+    std::cerr << std::move(result).error().to_string() << '\n';
+    return 1;
+  }
+  const terse::Environment& environment = **result;
 
   for (const auto& pair : environment.map()) {
     std::cout << "key: " << pair.first << '\n';
