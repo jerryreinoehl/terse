@@ -2,7 +2,6 @@
 #include "unwrap.hpp"
 
 #include <memory>
-#include <stack>
 
 using terse::Environment;
 using terse::MapStatement;
