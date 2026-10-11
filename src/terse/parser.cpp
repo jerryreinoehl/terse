@@ -31,60 +31,6 @@ std::optional<TokenMap> Parser::parse() {
     std::cout << std::move(statements).error().to_string() << '\n';
   }
 
-  //do {
-  //  tokens.clear();
-
-  //  tok = next();
-  //  std::cout << "first: " << tok->type() << '\n';
-  //  if (tok->type() == TokenType::Stop) {
-  //    break;
-  //  }
-
-  //  if (tok->type() != TokenType::String) {
-  //    return {};
-  //  }
-  //  src = static_cast<const StringToken*>(tok.get())->value();
-  //  std::cout << src << '\n';
-
-  //  tok = next();
-  //  if (tok->type() != TokenType::Arm) {
-  //    return {};
-  //  }
-  //  std::cout << "got arm\n";
-
-  //  while ((tok = next())->type() == TokenType::String) {
-  //    std::cout << static_cast<const StringToken*>(tok.get())->value() << '\n';
-  //    tokens.push_back(static_cast<const StringToken*>(tok.get())->value());
-  //  }
-  //  std::cout << "next: " << tok->type() << '\n';
-
-  //  emission = Emission{tokens};
-  //  map[src] = emission;
-
-  //  if (tok->type() == TokenType::Newline) {
-  //    tok = next();
-  //    std::cout << "1: " << tok->type() << '\n';
-  //  }
-
-  //  if (tok->type() == TokenType::LeftBrace) {
-  //    emissions.push(src);
-  //    maps.push(map);
-  //    map = TokenMap{};
-  //  }
-  //  else if (tok->type() == TokenType::RightBrace) {
-  //    while (tok->type() == TokenType::RightBrace) {
-  //      maps.top()[emissions.top()].set_map(map);
-  //      map = maps.top();
-  //      maps.pop();
-  //      emissions.pop();
-  //      tok = next();
-  //    }
-  //    putback(std::move(tok));
-  //  } else {
-  //    putback(std::move(tok));
-  //  }
-  //} while (tok->type() != TokenType::Stop);
-
   return map;
 }
 
