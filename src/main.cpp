@@ -52,19 +52,19 @@ int main(int argc, char **argv) {
 
   f.close();
 
-  //if (args.verbose())
-  //  std::cout << "\e[1;35m==> Executing: " << converted << "\e[0m\n";
+  if (args.verbose())
+    std::cout << "\e[1;35m==> Executing: " << translated << "\e[0m\n";
 
-  //int rc;
-  //if (args.dry_run())
-  //  rc = 0;
-  //else
-  //  rc = execute(converted);
+  int rc;
+  if (args.dry_run())
+    rc = 0;
+  else
+    rc = execute(translated);
 
-  //if (rc != 0)
-  //  perror("Error");
+  if (rc != 0)
+    perror("Error");
 
-  //return rc;
+  return rc;
 }
 
 std::vector<std::string> translate(
@@ -89,21 +89,21 @@ std::vector<std::string> translate(
   return converted;
 }
 
-//int execute(const std::vector<std::string>& args) {
-//  if (args.size() == 0) {
-//    errno = EINVAL;
-//    return -EINVAL;
-//  }
-//
-//  const char **argv = new const char*[args.size() + 1];
-//
-//  for (size_t i = 0; i < args.size(); i++)
-//    argv[i] = args[i].c_str();
-//  argv[args.size()] = nullptr;
-//
-//  int rc = execvp(argv[0], (char* const*)argv);
-//
-//  delete [] argv;
-//
-//  return rc;
-//}
+int execute(const std::vector<std::string>& args) {
+  if (args.size() == 0) {
+    errno = EINVAL;
+    return -EINVAL;
+  }
+
+  const char **argv = new const char*[args.size() + 1];
+
+  for (size_t i = 0; i < args.size(); i++)
+    argv[i] = args[i].c_str();
+  argv[args.size()] = nullptr;
+
+  int rc = execvp(argv[0], (char* const*)argv);
+
+  delete [] argv;
+
+  return rc;
+}
