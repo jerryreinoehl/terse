@@ -48,14 +48,10 @@ std::ostream& terse::operator<<(std::ostream& out, TokenType::Value type) {
   return out << static_cast<TokenType>(type).to_string();
 }
 
-Token::Token(TokenType type, int line, int col) noexcept : line_{line}, col_{col}, type_{type} {
-  std::cout << "Making token " << type << '\n';
-}
+Token::Token(TokenType type, int line, int col) noexcept : line_{line}, col_{col}, type_{type} {}
 
 StringToken::StringToken(const std::string& value, int line, int col) noexcept
-  : Token{TokenType::String, line, col}, value_{value} {
-  std::cout << "Making string token " << value << '\n';
-}
+  : Token{TokenType::String, line, col}, value_{value} {}
 
 std::string StringToken::value() const noexcept {
   return value_;
