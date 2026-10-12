@@ -65,16 +65,22 @@ namespace terse {
       int line() const noexcept;
       int col() const noexcept;
 
+      // Returns `true` if this token is of token class `T`, and `false`
+      // otherwise.
+      //   e.g.
+      //   Token token = StringToken{...};
+      //   assert(token.is<StringToken>());
+      //   assert(!token.is<ErrorToken>());
       template <typename T>
-      bool is() const noexcept {
-        return type_ == TokenTraits<T>::type;
-      }
+      bool is() const noexcept;
 
+      // Casts this token to token class `T`.
+      // Asserts that this token's `type()` matches the `type()` of `T`.
+      //   e.g.
+      //   Token token = StringToken{...};
+      //   std::cout << token.as<StringToken>().value() << "\n";
       template <typename T>
-      const T& as() const {
-        assert(type_ == TokenTraits<T>::type);
-        return static_cast<const T&>(*this);
-      }
+      const T& as() const;
 
     private:
       int line_;
@@ -113,4 +119,19 @@ namespace terse {
     static constexpr TokenType type{TokenType::Error};
   };
 
+}
+
+//*****************************************************************************
+// class Token
+//*****************************************************************************
+
+template <typename T>
+bool terse::Token::is() const noexcept {
+  return type_ == TokenTraits<T>::type;
+}
+
+template <typename T>
+const T& terse::Token::as() const {
+  assert(type_ == TokenTraits<T>::type);
+  return static_cast<const T&>(*this);
 }
