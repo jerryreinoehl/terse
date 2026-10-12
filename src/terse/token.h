@@ -54,9 +54,6 @@ namespace terse {
 
   std::ostream& operator<<(std::ostream& out, TokenType::Value type);
 
-  template <typename T>
-  struct TokenTraits;
-
   class Token {
     public:
       Token(TokenType type, int line, int col) noexcept;
@@ -109,13 +106,16 @@ namespace terse {
       std::string error_{};
   };
 
+  template <typename T>
+  struct token_traits;
+
   template <>
-  struct TokenTraits<StringToken> {
+  struct token_traits<StringToken> {
     static constexpr TokenType type{TokenType::String};
   };
 
   template <>
-  struct TokenTraits<ErrorToken> {
+  struct token_traits<ErrorToken> {
     static constexpr TokenType type{TokenType::Error};
   };
 
@@ -127,11 +127,11 @@ namespace terse {
 
 template <typename T>
 bool terse::Token::is() const noexcept {
-  return type_ == TokenTraits<T>::type;
+  return type_ == token_traits<T>::type;
 }
 
 template <typename T>
 const T& terse::Token::as() const {
-  assert(type_ == TokenTraits<T>::type);
+  assert(type_ == token_traits<T>::type);
   return static_cast<const T&>(*this);
 }
