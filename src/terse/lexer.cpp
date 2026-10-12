@@ -7,7 +7,6 @@ using terse::Lexer;
 using terse::Token;
 using terse::TokenResult;
 
-
 TokenResult Lexer::next() {
   char c;
   std::stringstream lexeme{};

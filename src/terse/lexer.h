@@ -12,17 +12,13 @@ namespace terse {
 
   class Lexer {
     public:
-      Lexer(std::istream& stream) : stream_{stream}, reader_{stream, 4096} {}
-      Lexer(std::istream&& stream) : Lexer{stream} {}
+      Lexer(std::istream& stream) : reader_{stream, 4096} {}
 
       // Return next `Token` in buffer.
       TokenResult next();
 
     private:
-      std::istream& stream_; // Do we really need to keep a ref of this.
-
       BufferedReader reader_;
-      char c_;
       int line_{1};
       int col_{1};
       int prev_col_{1};
