@@ -52,18 +52,6 @@ Token::Token(TokenType type, int line, int col) noexcept : line_{line}, col_{col
   std::cout << "Making token " << type << '\n';
 }
 
-TokenType Token::type() const noexcept {
-  return type_;
-}
-
-int Token::line() const noexcept {
-  return line_;
-}
-
-int Token::col() const noexcept {
-  return col_;
-}
-
 StringToken::StringToken(const std::string& value, int line, int col) noexcept
   : Token{TokenType::String, line, col}, value_{value} {
   std::cout << "Making string token " << value << '\n';

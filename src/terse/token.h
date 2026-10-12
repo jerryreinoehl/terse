@@ -58,7 +58,10 @@ namespace terse {
     public:
       Token(TokenType type, int line, int col) noexcept;
 
+      // This token's type.
       TokenType type() const noexcept;
+
+      // The line and column numbers where this token was found. (1-based).
       int line() const noexcept;
       int col() const noexcept;
 
@@ -124,6 +127,18 @@ namespace terse {
 //*****************************************************************************
 // class Token
 //*****************************************************************************
+
+inline terse::TokenType terse::Token::type() const noexcept {
+  return type_;
+}
+
+inline int terse::Token::line() const noexcept {
+  return line_;
+}
+
+inline int terse::Token::col() const noexcept {
+  return col_;
+}
 
 template <typename T>
 bool terse::Token::is() const noexcept {
