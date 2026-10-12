@@ -27,13 +27,22 @@ namespace terse {
         None, // Keep this last as it is used for TokenType element count.
       };
 
+      // The number of `TokenType` values.
       static constexpr std::size_t value_count{static_cast<std::size_t>(TokenType::None + 1)};
+
+      // Maps `TokenType`s to their printable names.
       static std::vector<std::string_view> names;
+
+      // Maps a string lexeme to a `TokenType`.
       static std::map<std::string_view, TokenType> map;
 
+      // Update `names` and `map` with a new `TokenType`.
       static void add(TokenType type, std::string_view name);
       static void add(TokenType type, std::string_view name, std::string_view lexeme);
 
+      // Gets the `TokenType` corresponding to the lexeme `lexeme`.
+      // Returns `TokenType::None` if the lexeme doesn't match another
+      // `TokenType`.
       static TokenType from_lexeme(std::string_view lexeme);
 
       TokenType() noexcept {}
