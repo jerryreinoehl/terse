@@ -5,11 +5,6 @@
 
 #include "token.h"
 
-namespace idx {
-  struct last_t {};
-  [[maybe_unused]] static last_t last;
-}
-
 namespace terse {
 
   class Statement;
@@ -31,7 +26,6 @@ namespace terse {
       const std::vector<std::string> words() const noexcept;
 
       const std::string& operator[](size_t index) const;
-      const std::string& operator[](idx::last_t) const;
 
       const std::string& first() const noexcept;
 

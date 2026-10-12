@@ -22,10 +22,6 @@ const std::string& WordExpression::operator[](size_t index) const {
   return words_.at(index);
 }
 
-const std::string& WordExpression::operator[](idx::last_t) const {
-  return words_.at(words_.size()-1);
-}
-
 const std::string& WordExpression::first() const noexcept {
   return words_[0];
 }
