@@ -31,23 +31,7 @@ int main(int argc, char **argv) {
   }
   const terse::Environment& environment = **result;
 
-  for (const auto& pair : environment.map()) {
-    std::cout << "key: " << pair.first << '\n';
-  }
-
   std::vector<std::string> translated = environment.translate(args.command());
-
-  std::cout << "command: ";
-  for (const auto& word : args.command()) {
-    std::cout << word << ' ';
-  }
-  std::cout << '\n';
-
-  std::cout << "translated: ";
-  for (auto& word : translated) {
-    std::cout << "'" << word << "'" << ' ';
-  }
-  std::cout << '\n';
 
   f.close();
 

@@ -30,18 +30,11 @@ TokenResult Parser::next() {
     return std::move(peak_token_);
   }
 
-  auto result = lexer_.next();
-  ///
-  if (result) {
-    std::cout << "Reading: " << result->get()->type() << '\n';
-    line_ = result->get()->line();
-    col_ = result->get()->col();
-    return std::move(*result);
-  } else {
-    std::cout << "Error getting result from lexer\n";
-    return result;
-  }
-  ///
+  auto token = unwrap(lexer_.next());
+  line_ = token->line();
+  col_ = token->col();
+
+  return token;
 }
 
 TokenResult Parser::next_ignore_newlines() {
@@ -75,7 +68,6 @@ ParseResult<const Token*> Parser::peak() {
     peak_token_ = unwrap(lexer_.next());
   }
 
-  std::cout << "Peaking:: " << peak_token_->type() << '\n';
   line_ = peak_token_->line();
   col_ = peak_token_->col();
   return peak_token_.get();
@@ -108,8 +100,6 @@ ParseResult<const Token*> Parser::peak_ignore_newlines() {
 }
 
 ParseResult<Statements> Parser::parse_statements() {
-  std::cout << "[] parse_statements\n";
-
   Statements statements{};
 
   do {
@@ -120,13 +110,10 @@ ParseResult<Statements> Parser::parse_statements() {
     statements.add(unwrap(parse_statement()));
   } while (true);
 
-  std::cout << "FINISHED parsing config!!!!!\n";
   return statements;
 }
 
 ParseResult<Statement> Parser::parse_statement() {
-  std::cout << "[] parse_statement\n";
-
   std::unique_ptr<const Token> token = unwrap(next_require_type(TokenType::String));
   unwrap(unwrap(peak())->type() == TokenType::Arm, malformed_statement_error(line_, col_));
   putback(std::move(token));
@@ -135,8 +122,6 @@ ParseResult<Statement> Parser::parse_statement() {
 }
 
 ParseResult<MapStatement> Parser::parse_map_statement() {
-  std::cout << "[] parse_map_statement\n";
-
   WordExpression source;
   WordExpression target;
   Statements statements;
@@ -169,8 +154,6 @@ ParseResult<MapStatement> Parser::parse_map_statement() {
 }
 
 ParseResult<WordExpression> Parser::parse_word_expression() {
-  std::cout << "[] parse_word_statement\n";
-
   WordExpression expression;
 
   do {
