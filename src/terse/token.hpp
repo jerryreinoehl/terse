@@ -136,6 +136,9 @@ namespace terse {
 // class Token
 //*****************************************************************************
 
+inline terse::Token::Token(TokenType type, int line, int col) noexcept
+  : line_{line}, col_{col}, type_{type} {}
+
 inline terse::TokenType terse::Token::type() const noexcept {
   return type_;
 }
@@ -149,12 +152,34 @@ inline int terse::Token::col() const noexcept {
 }
 
 template <typename T>
-bool terse::Token::is() const noexcept {
+inline bool terse::Token::is() const noexcept {
   return type_ == token_traits<T>::type;
 }
 
 template <typename T>
-const T& terse::Token::as() const {
+inline const T& terse::Token::as() const {
   assert(type_ == token_traits<T>::type);
   return static_cast<const T&>(*this);
+}
+
+//*****************************************************************************
+// class StringToken
+//*****************************************************************************
+
+inline terse::StringToken::StringToken(const std::string& value, int line, int col) noexcept
+  : Token{TokenType::String, line, col}, value_{value} {}
+
+inline std::string terse::StringToken::value() const noexcept {
+  return value_;
+}
+
+//*****************************************************************************
+// class ErrorToken
+//*****************************************************************************
+
+inline terse::ErrorToken::ErrorToken(const std::string& error, int line, int col) noexcept
+  : Token{TokenType::Error, line, col}, error_{error} {}
+
+inline std::string terse::ErrorToken::error() const noexcept {
+  return error_;
 }

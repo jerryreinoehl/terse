@@ -1,9 +1,6 @@
 #include "token.hpp"
 
-using terse::Token;
 using terse::TokenType;
-using terse::StringToken;
-using terse::ErrorToken;
 
 std::vector<std::string_view> TokenType::names{TokenType::value_count};
 std::map<std::string_view, terse::TokenType> TokenType::map{};
@@ -46,20 +43,4 @@ TokenType::TokenType(TokenType::token_type_t) {
 
 std::ostream& terse::operator<<(std::ostream& out, TokenType::Value type) {
   return out << static_cast<TokenType>(type).to_string();
-}
-
-Token::Token(TokenType type, int line, int col) noexcept : line_{line}, col_{col}, type_{type} {}
-
-StringToken::StringToken(const std::string& value, int line, int col) noexcept
-  : Token{TokenType::String, line, col}, value_{value} {}
-
-std::string StringToken::value() const noexcept {
-  return value_;
-}
-
-ErrorToken::ErrorToken(const std::string& error, int line, int col) noexcept
-  : Token{TokenType::Error, line, col}, error_{error} {}
-
-std::string ErrorToken::error() const noexcept {
-  return error_;
 }
