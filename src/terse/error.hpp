@@ -1,7 +1,7 @@
 #pragma once
 
 #include "expected.hpp"
-#include "token.h"
+#include "token.hpp"
 
 #include <memory>
 #include <string>

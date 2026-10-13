@@ -1,9 +1,9 @@
 #pragma once
 
-#include "bufferedreader.h"
-#include "error.h"
+#include "bufferedreader.hpp"
+#include "error.hpp"
 #include "expected.hpp"
-#include "token.h"
+#include "token.hpp"
 
 #include <iostream>
 #include <memory>

@@ -1,4 +1,4 @@
-#include "token.h"
+#include "token.hpp"
 
 using terse::Token;
 using terse::TokenType;

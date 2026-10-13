@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main.hpp"
 
 #include "args.h"
 #include "terse/parser.h"

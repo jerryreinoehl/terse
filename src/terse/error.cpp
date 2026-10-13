@@ -1,4 +1,4 @@
-#include "error.h"
+#include "error.hpp"
 
 using terse::ParseError;
 using terse::TokenType;

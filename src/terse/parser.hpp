@@ -1,10 +1,10 @@
 #pragma once
 
-#include "environment.h"
-#include "error.h"
-#include "grammar.h"
-#include "lexer.h"
-#include "token.h"
+#include "environment.hpp"
+#include "error.hpp"
+#include "grammar.hpp"
+#include "lexer.hpp"
+#include "token.hpp"
 
 #include <memory>
 

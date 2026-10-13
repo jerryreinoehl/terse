@@ -1,4 +1,4 @@
-#include "grammar.h"
+#include "grammar.hpp"
 
 #include <iostream> // REMOVE
 
