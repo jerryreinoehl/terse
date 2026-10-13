@@ -16,7 +16,7 @@ SRCS = src/terse/lexer.cpp \
 	   src/terse/environment.cpp \
 	   src/args.cpp \
 	   src/os.cpp
-HDRS = $(wildcard src/*.h src/**/*.h)
+HDRS = $(wildcard src/*.hpp src/**/*.hpp)
 OBJS = $(patsubst src/%.cpp, build/%.o, $(SRCS))
 INCS = -Iinclude
 

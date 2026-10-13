@@ -1,7 +1,7 @@
 #include "main.hpp"
 
 #include "args.hpp"
-#include "terse/parser.h"
+#include "terse/parser.hpp"
 #include "os.hpp"
 
 #include <fstream>
