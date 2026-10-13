@@ -1,12 +1,9 @@
 #include "grammar.hpp"
 
-#include <iostream> // REMOVE
-
 using terse::WordExpression;
 using terse::Statements;
 
 void WordExpression::add(const std::string& word) {
-  std::cout << "WordExpression::add( " << word << " )\n";
   words_.push_back(word);
 }
 
