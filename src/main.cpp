@@ -1,6 +1,6 @@
 #include "main.hpp"
 
-#include "args.h"
+#include "args.hpp"
 #include "terse/parser.h"
 #include "os.hpp"
 
