@@ -6,26 +6,6 @@ std::vector<std::string_view> TokenType::names{TokenType::value_count};
 std::map<std::string_view, terse::TokenType> TokenType::map{};
 TokenType TokenType::token_type{TokenType::token_type_t{}};
 
-void TokenType::add(TokenType type, std::string_view name) {
-  TokenType::names[type] = name;
-}
-
-void TokenType::add(TokenType type, std::string_view name, std::string_view lexeme) {
-  TokenType::names[type] = name;
-  TokenType::map[lexeme] = type;
-}
-
-TokenType TokenType::from_lexeme(std::string_view lexeme) {
-  if (TokenType::map.count(lexeme) > 0) {
-    return TokenType::map[lexeme];
-  }
-  return TokenType::None;
-}
-
-std::string_view TokenType::to_string() const {
-  return TokenType::names[value];
-}
-
 TokenType::TokenType(TokenType::token_type_t) {
   TokenType::add(TokenType::None, "None");
   TokenType::add(TokenType::Arm, "Arm", "=>");

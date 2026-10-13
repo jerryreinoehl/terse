@@ -133,6 +133,30 @@ namespace terse {
 }
 
 //*****************************************************************************
+// class TokenType
+//*****************************************************************************
+
+inline void terse::TokenType::add(TokenType type, std::string_view name) {
+  TokenType::names[type] = name;
+}
+
+inline void terse::TokenType::add(TokenType type, std::string_view name, std::string_view lexeme) {
+  TokenType::names[type] = name;
+  TokenType::map[lexeme] = type;
+}
+
+inline terse::TokenType terse::TokenType::from_lexeme(std::string_view lexeme) {
+  if (TokenType::map.count(lexeme) > 0) {
+    return TokenType::map[lexeme];
+  }
+  return TokenType::None;
+}
+
+inline std::string_view terse::TokenType::to_string() const {
+  return TokenType::names[value];
+}
+
+//*****************************************************************************
 // class Token
 //*****************************************************************************
 
