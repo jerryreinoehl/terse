@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 
-#include "token.hpp"
-
 namespace terse {
 
   class Statement;
