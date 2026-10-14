@@ -2,11 +2,8 @@
 
 #include "bufferedreader.hpp"
 #include "error.hpp"
-#include "expected.hpp"
-#include "token.hpp"
 
 #include <iostream>
-#include <memory>
 
 namespace terse {
 
