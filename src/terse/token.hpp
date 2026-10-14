@@ -200,7 +200,7 @@ inline const T& terse::Token::as() const {
 template <typename T>
 inline T& terse::Token::as() {
   assert(type_ == token_traits<T>::type);
-  return static_cast<const T&>(*this);
+  return static_cast<T&>(*this);
 }
 
 //*****************************************************************************
