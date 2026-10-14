@@ -91,6 +91,9 @@ namespace terse {
       template <typename T>
       const T& as() const;
 
+      template <typename T>
+      T& as();
+
     private:
       int line_;
       int col_;
@@ -190,6 +193,12 @@ inline bool terse::Token::is() const noexcept {
 
 template <typename T>
 inline const T& terse::Token::as() const {
+  assert(type_ == token_traits<T>::type);
+  return static_cast<const T&>(*this);
+}
+
+template <typename T>
+inline T& terse::Token::as() {
   assert(type_ == token_traits<T>::type);
   return static_cast<const T&>(*this);
 }
