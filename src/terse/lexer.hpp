@@ -36,7 +36,15 @@ namespace terse {
       }
 
       bool is_word_boundary(int c) const noexcept {
-        return (c == ' ' || c == '\n' || c == '\t' || c == '#' || c == '"');
+        const char* word_boundaries = " \n;#\t\"";
+
+        for (; *word_boundaries; ++word_boundaries) {
+          if (c == *word_boundaries) {
+            return true;
+          }
+        }
+
+        return false;
       }
 
       bool is_end_of_line(int c) const noexcept {

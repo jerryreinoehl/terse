@@ -14,7 +14,7 @@ TokenType::TokenType(TokenType::token_type_t) {
   TokenType::add(TokenType::DoubleQuote, "DoubleQuote", "\"");
   TokenType::add(TokenType::Error, "Error");
   TokenType::add(TokenType::Func, "Func", "$");
-  TokenType::add(TokenType::Newline, "Newline", "\n");
+  TokenType::add(TokenType::Newline, "Newline", {"\n", ";"});
   TokenType::add(TokenType::LeftParen, "LeftParen", "(");
   TokenType::add(TokenType::RightParen, "RightParen", ")");
   TokenType::add(TokenType::Stop, "Stop");

@@ -19,7 +19,7 @@ TokenResult Lexer::next() {
     col = col_;
     c = get();
 
-    if (c == '\n') {
+    if (c == '\n' || c == ';') {
       return {std::make_unique<const Token>(TokenType::Newline, line, col)};
     } else if (c == EOF) {
       return {std::make_unique<const Token>(TokenType::Stop, line, col)};

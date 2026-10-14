@@ -38,6 +38,7 @@ namespace terse {
       // Update `names` and `map` with a new `TokenType`.
       static void add(TokenType type, std::string_view name);
       static void add(TokenType type, std::string_view name, std::string_view lexeme);
+      static void add(TokenType type, std::string_view name, std::initializer_list<std::string_view> lexemes);
 
       // Gets the `TokenType` corresponding to the lexeme `lexeme`.
       // Returns `TokenType::None` if the lexeme doesn't match another
@@ -143,6 +144,13 @@ inline void terse::TokenType::add(TokenType type, std::string_view name) {
 inline void terse::TokenType::add(TokenType type, std::string_view name, std::string_view lexeme) {
   TokenType::names[type] = name;
   TokenType::map[lexeme] = type;
+}
+
+inline void terse::TokenType::add(TokenType type, std::string_view name, std::initializer_list<std::string_view> lexemes) {
+  TokenType::names[type] = name;
+  for (const auto& lexeme : lexemes) {
+    TokenType::map[lexeme] = type;
+  }
 }
 
 inline terse::TokenType terse::TokenType::from_lexeme(std::string_view lexeme) {
