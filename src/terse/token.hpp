@@ -66,8 +66,19 @@ namespace terse {
 
   std::ostream& operator<<(std::ostream& out, TokenType::Value type);
 
+  class Token;
+  class TokenDeleter;
+
+  using TokenPtr = std::unique_ptr<Token, TokenDeleter>;
+  using ConstTokenPtr = std::unique_ptr<const Token, TokenDeleter>;
+
   class Token {
     public:
+
+      template <typename... Args>
+      utl::enable_if_t<utl::is_nothrow_constructible_v<Token, Args...>(), TokenPtr>
+      static make_ptr(Args... args) noexcept;
+
       Token(TokenType type, int line, int col) noexcept;
 
       // This token's type.
@@ -122,6 +133,11 @@ namespace terse {
 
   class StringToken : public Token {
     public:
+
+      template <typename... Args>
+      utl::enable_if_t<utl::is_constructible_v<StringToken, Args...>(), TokenPtr>
+      static make_ptr(Args... args) noexcept;
+
       StringToken(const std::string& value, int line, int col) noexcept;
 
       std::string value() const noexcept;
@@ -141,18 +157,9 @@ namespace terse {
   };
 
   // Deleter to probably delete a `Token` based on its `TokenType`.
-  class TokenDeleter {
+  struct TokenDeleter {
     void operator()(const Token *p);
   };
-
-  using TokenPtr = std::unique_ptr<Token, TokenDeleter>;
-  using ConstTokenPtr = std::unique_ptr<const Token, TokenDeleter>;
-
-  template <
-    typename... Args,
-    utl::enable_if_t<utl::is_constructible_v<Token, Args...>, int> = 1
-  >
-  TokenPtr make_token_ptr(Args... args);
 
   template <typename T>
   struct token_traits;
@@ -204,6 +211,12 @@ inline std::string_view terse::TokenType::to_string() const {
 // class Token
 //*****************************************************************************
 
+template <typename... Args>
+utl::enable_if_t<utl::is_nothrow_constructible_v<terse::Token, Args...>(), terse::TokenPtr>
+inline terse::Token::make_ptr(Args... args) noexcept {
+  return TokenPtr{new Token{std::forward<Args>(args)...}};
+}
+
 inline terse::Token::Token(TokenType type, int line, int col) noexcept
   : line_{line}, col_{col}, type_{type} {}
 
@@ -225,33 +238,29 @@ inline bool terse::Token::is() const noexcept {
 }
 
 template <typename T>
-inline
 utl::enable_if_t<!utl::is_pointer_v<T>(), const T&>
-terse::Token::as() const {
+inline terse::Token::as() const {
   assert(type_ == token_traits<utl::base_type_t<T>>::type);
   return static_cast<const T&>(*this);
 }
 
 template <typename T>
-inline
 utl::enable_if_t<!utl::is_pointer_v<T>(), T&>
-terse::Token::as() {
+inline terse::Token::as() {
   assert(type_ == token_traits<utl::base_type_t<T>>::type);
   return static_cast<T&>(*this);
 }
 
 template <typename T>
-inline
 utl::enable_if_t<utl::is_pointer_v<T>(), T>
-terse::Token::as() const {
+inline terse::Token::as() const {
   assert(type_ == token_traits<utl::base_type_t<T>>::type);
   return static_cast<const T>(this);
 }
 
 template <typename T>
-inline
 utl::enable_if_t<utl::is_pointer_v<T>(), T>
-terse::Token::as() {
+inline terse::Token::as() {
   assert(type_ == token_traits<utl::base_type_t<T>>::type);
   return static_cast<T>(this);
 }
@@ -259,6 +268,12 @@ terse::Token::as() {
 //*****************************************************************************
 // class StringToken
 //*****************************************************************************
+
+template <typename... Args>
+utl::enable_if_t<utl::is_constructible_v<terse::StringToken, Args...>(), terse::TokenPtr>
+inline terse::StringToken::make_ptr(Args... args) noexcept {
+  return TokenPtr{new StringToken{std::forward<Args>(args)...}};
+}
 
 inline terse::StringToken::StringToken(const std::string& value, int line, int col) noexcept
   : Token{TokenType::String, line, col}, value_{value} {}
@@ -292,16 +307,4 @@ inline void terse::TokenDeleter::operator()(const Token *p) {
       delete p;
       break;
   }
-}
-
-//*****************************************************************************
-//
-//*****************************************************************************
-
-template <
-  typename... Args,
-  utl::enable_if_t<utl::is_constructible_v<terse::Token, Args...>, int>
->
-terse::TokenPtr terse::make_token_ptr(Args... args) {
-  return TokenPtr{new Token{std::forward<Args>(args)...}};
 }
