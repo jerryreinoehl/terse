@@ -2,8 +2,8 @@ NAME = terse
 
 CC := c++
 #CFLAGS := -Wall -Wextra -Werror -Weffc++ -O2 -std=c++11
-#CFLAGS := -Wall -Wextra -O2 -fsanitize=address
-CFLAGS := -Wall -Wextra -O2
+#CFLAGS := -Wall -Wextra -O2 -fsanitize=address -std=c++11
+CFLAGS := -std=c++11 -Wall -Wextra -O2
 TARGET = trs
 #SRCS = $(wildcard src/*.cpp src/**/*.cpp)
 SRCS = src/terse/lexer.cpp \
