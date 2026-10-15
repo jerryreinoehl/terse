@@ -5,10 +5,10 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <string_view>
 #include <vector>
 
 #include <utl/type_traits.hpp>
+#include <utl/string_view.hpp>
 
 namespace terse {
 
@@ -33,26 +33,26 @@ namespace terse {
       static constexpr std::size_t value_count{static_cast<std::size_t>(TokenType::None + 1)};
 
       // Maps `TokenType`s to their printable names.
-      static std::vector<std::string_view> names;
+      static std::vector<utl::string_view> names;
 
       // Maps a string lexeme to a `TokenType`.
-      static std::map<std::string_view, TokenType> map;
+      static std::map<utl::string_view, TokenType> map;
 
       // Update `names` and `map` with a new `TokenType`.
-      static void add(TokenType type, std::string_view name);
-      static void add(TokenType type, std::string_view name, std::string_view lexeme);
-      static void add(TokenType type, std::string_view name, std::initializer_list<std::string_view> lexemes);
+      static void add(TokenType type, utl::string_view name);
+      static void add(TokenType type, utl::string_view name, utl::string_view lexeme);
+      static void add(TokenType type, utl::string_view name, std::initializer_list<utl::string_view> lexemes);
 
       // Gets the `TokenType` corresponding to the lexeme `lexeme`.
       // Returns `TokenType::None` if the lexeme doesn't match another
       // `TokenType`.
-      static TokenType from_lexeme(std::string_view lexeme);
+      static TokenType from_lexeme(utl::string_view lexeme);
 
       TokenType() noexcept {}
       constexpr TokenType(Value value) noexcept : value{value} {}
       constexpr operator Value() const noexcept { return value; }
 
-      std::string_view to_string() const;
+      utl::string_view to_string() const;
 
     private:
       struct token_type_t {};
@@ -180,30 +180,30 @@ namespace terse {
 // class TokenType
 //*****************************************************************************
 
-inline void terse::TokenType::add(TokenType type, std::string_view name) {
+inline void terse::TokenType::add(TokenType type, utl::string_view name) {
   TokenType::names[type] = name;
 }
 
-inline void terse::TokenType::add(TokenType type, std::string_view name, std::string_view lexeme) {
+inline void terse::TokenType::add(TokenType type, utl::string_view name, utl::string_view lexeme) {
   TokenType::names[type] = name;
   TokenType::map[lexeme] = type;
 }
 
-inline void terse::TokenType::add(TokenType type, std::string_view name, std::initializer_list<std::string_view> lexemes) {
+inline void terse::TokenType::add(TokenType type, utl::string_view name, std::initializer_list<utl::string_view> lexemes) {
   TokenType::names[type] = name;
   for (const auto& lexeme : lexemes) {
     TokenType::map[lexeme] = type;
   }
 }
 
-inline terse::TokenType terse::TokenType::from_lexeme(std::string_view lexeme) {
+inline terse::TokenType terse::TokenType::from_lexeme(utl::string_view lexeme) {
   if (TokenType::map.count(lexeme) > 0) {
     return TokenType::map[lexeme];
   }
   return TokenType::None;
 }
 
-inline std::string_view terse::TokenType::to_string() const {
+inline utl::string_view terse::TokenType::to_string() const {
   return TokenType::names[value];
 }
 

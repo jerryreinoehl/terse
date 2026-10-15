@@ -2,8 +2,8 @@
 
 using terse::TokenType;
 
-std::vector<std::string_view> TokenType::names{TokenType::value_count};
-std::map<std::string_view, terse::TokenType> TokenType::map{};
+std::vector<utl::string_view> TokenType::names{TokenType::value_count};
+std::map<utl::string_view, terse::TokenType> TokenType::map{};
 TokenType TokenType::token_type{TokenType::token_type_t{}};
 
 TokenType::TokenType(TokenType::token_type_t) {
