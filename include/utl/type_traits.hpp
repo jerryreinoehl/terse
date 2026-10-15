@@ -26,11 +26,30 @@ namespace utl {
   using is_pointer = std::is_pointer<T>;
 
   template <typename T>
-  constexpr bool is_pointer_v = is_pointer<T>::value;
+  constexpr bool is_pointer_v() { return is_pointer<T>::value; }
 
   template <bool B, typename T = void>
   using enable_if = std::enable_if<B, T>;
 
   template <bool B, typename T = void>
   using enable_if_t = typename enable_if<B, T>::type;
+
+  template <typename T, typename... Args>
+  using is_constructible = std::is_constructible<T, Args...>;
+
+  template <typename T, typename... Args>
+  constexpr bool is_constructible_v() { return is_constructible<T, Args...>::value; }
+
+  template <typename T, typename... Args>
+  using is_nothrow_constructible = std::is_nothrow_constructible<T, Args...>;
+
+  template <typename T, typename... Args>
+  constexpr bool is_nothrow_constructible_v() { return is_nothrow_constructible<T, Args...>::value; }
+
+  template <typename T, typename... Args>
+  using is_trivially_constructible = std::is_trivially_constructible<T, Args...>;
+
+  template <typename T, typename... Args>
+  constexpr bool is_trivially_constructible_v() { return is_trivially_constructible<T, Args...>::value; }
+
 };
