@@ -12,7 +12,7 @@ namespace terse {
       ParseError(int line, int col, utl::string_view message);
 
       std::string to_string() const noexcept {
-        return std::string{} + std::to_string(line_) + ":" + std::to_string(col_) + " " + message_;
+        return std::to_string(line_) + ":" + std::to_string(col_) + " " + message_;
       }
 
     private:
