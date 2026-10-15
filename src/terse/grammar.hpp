@@ -29,7 +29,7 @@ namespace terse {
       utl::string_view first() const noexcept;
 
     private:
-      std::vector<std::string> words_;
+      std::vector<std::string> words_{};
   };
 
   class Statement {
@@ -42,7 +42,7 @@ namespace terse {
       void add(const Statement& statement);
 
     private:
-      std::vector<Statement> statements_;
+      std::vector<Statement> statements_{};
   };
 
   class MapStatement : public Statement {
@@ -50,9 +50,9 @@ namespace terse {
       MapStatement(WordExpression source, WordExpression target, Statements statements)
         : source{source}, target{target}, statements{statements} {}
 
-      WordExpression source;
-      WordExpression target;
-      Statements statements;
+      WordExpression source{};
+      WordExpression target{};
+      Statements statements{};
 
     private:
   };
