@@ -97,7 +97,9 @@ inline terse::BufferedReader::BufferedReader(BufferedReader&& other) {
 }
 
 inline terse::BufferedReader::~BufferedReader() {
-  std::free(buf_);
+  if (buf_ != nullptr) {
+    std::free(buf_);
+  }
   buf_ = cur_ = end_ = nullptr;
 }
 
@@ -106,7 +108,9 @@ inline terse::BufferedReader& terse::BufferedReader::operator=(BufferedReader&& 
     return *this;
   }
 
-  std::free(buf_);
+  if (buf_ != nullptr) {
+    std::free(buf_);
+  }
 
   stream_ = other.stream_;
   size_ = other.size_;
