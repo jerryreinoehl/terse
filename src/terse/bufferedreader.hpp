@@ -81,10 +81,11 @@ inline terse::BufferedReader::BufferedReader(std::istream& stream, size_t size)
   cur_ = end_ = buf_ = static_cast<char*>(mem);
 }
 
-inline terse::BufferedReader::BufferedReader(BufferedReader&& other) {
-  std::free(buf_);
+inline terse::BufferedReader::BufferedReader(BufferedReader&& other) : stream_{other.stream_} {
+  if (buf_ != nullptr) {
+    std::free(buf_);
+  }
 
-  stream_ = other.stream_;
   size_ = other.size_;
   buf_ = other.buf_;
   cur_ = other.cur_;
