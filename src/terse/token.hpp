@@ -138,9 +138,9 @@ namespace terse {
       utl::enable_if_t<utl::is_constructible_v<StringToken, Args...>(), TokenPtr>
       static make_ptr(Args... args) noexcept;
 
-      StringToken(const std::string& value, int line, int col) noexcept;
+      StringToken(utl::string_view value, int line, int col) noexcept;
 
-      std::string value() const noexcept;
+      utl::string_view value() const noexcept;
 
     private:
       std::string value_{};
@@ -148,9 +148,9 @@ namespace terse {
 
   class ErrorToken : public Token {
     public:
-      ErrorToken(const std::string& error, int line, int col) noexcept;
+      ErrorToken(utl::string_view error, int line, int col) noexcept;
 
-      std::string error() const noexcept;
+      utl::string_view error() const noexcept;
 
     private:
       std::string error_{};
@@ -275,10 +275,10 @@ inline terse::StringToken::make_ptr(Args... args) noexcept {
   return TokenPtr{new StringToken{std::forward<Args>(args)...}};
 }
 
-inline terse::StringToken::StringToken(const std::string& value, int line, int col) noexcept
+inline terse::StringToken::StringToken(utl::string_view value, int line, int col) noexcept
   : Token{TokenType::String, line, col}, value_{value} {}
 
-inline std::string terse::StringToken::value() const noexcept {
+inline utl::string_view terse::StringToken::value() const noexcept {
   return value_;
 }
 
@@ -286,10 +286,10 @@ inline std::string terse::StringToken::value() const noexcept {
 // class ErrorToken
 //*****************************************************************************
 
-inline terse::ErrorToken::ErrorToken(const std::string& error, int line, int col) noexcept
+inline terse::ErrorToken::ErrorToken(utl::string_view error, int line, int col) noexcept
   : Token{TokenType::Error, line, col}, error_{error} {}
 
-inline std::string terse::ErrorToken::error() const noexcept {
+inline utl::string_view terse::ErrorToken::error() const noexcept {
   return error_;
 }
 

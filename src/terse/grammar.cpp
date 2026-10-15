@@ -3,23 +3,23 @@
 using terse::WordExpression;
 using terse::Statements;
 
-void WordExpression::add(const std::string& word) {
-  words_.push_back(word);
+void WordExpression::add(utl::string_view word) {
+  words_.push_back(std::string{word});
 }
 
 size_t WordExpression::size() const noexcept {
   return words_.size();
 }
 
-const std::vector<std::string> WordExpression::words() const noexcept {
+const std::vector<std::string>& WordExpression::words() const noexcept {
   return words_;
 }
 
-const std::string& WordExpression::operator[](size_t index) const {
+utl::string_view WordExpression::operator[](size_t index) const {
   return words_.at(index);
 }
 
-const std::string& WordExpression::first() const noexcept {
+utl::string_view WordExpression::first() const noexcept {
   return words_[0];
 }
 

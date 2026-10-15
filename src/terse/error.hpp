@@ -4,11 +4,12 @@
 #include "token.hpp"
 
 #include <string>
+#include <utl/string_view.hpp>
 
 namespace terse {
   class ParseError {
     public:
-      ParseError(int line, int col, std::string message);
+      ParseError(int line, int col, utl::string_view message);
 
       std::string to_string() const noexcept {
         return std::string{} + std::to_string(line_) + ":" + std::to_string(col_) + " " + message_;

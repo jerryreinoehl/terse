@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <utl/string_view.hpp>
 
 namespace terse {
 
@@ -18,14 +19,14 @@ namespace terse {
 
   class WordExpression : public Expression {
     public:
-      void add(const std::string& word);
+      void add(utl::string_view word);
       size_t size() const noexcept;
 
-      const std::vector<std::string> words() const noexcept;
+      const std::vector<std::string>& words() const noexcept;
 
-      const std::string& operator[](size_t index) const;
+      utl::string_view operator[](size_t index) const;
 
-      const std::string& first() const noexcept;
+      utl::string_view first() const noexcept;
 
     private:
       std::vector<std::string> words_;

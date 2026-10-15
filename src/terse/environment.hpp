@@ -4,6 +4,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <utl/string_view.hpp>
 
 namespace terse {
 
@@ -37,7 +38,7 @@ namespace terse {
       const TranslationMap& map() const noexcept;
       TranslationMap& map() noexcept;
 
-      Translation& add_translation(const std::string& source, const std::vector<std::string>& target);
+      Translation& add_translation(utl::string_view source, const std::vector<std::string>& target);
       void push_map(TranslationMap& map);
       void pop_map();
 

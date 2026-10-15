@@ -54,9 +54,9 @@ TranslationMap& Environment::map() noexcept {
   return global_map_;
 }
 
-Translation& Environment::add_translation(const std::string& source, const std::vector<std::string>& target) {
+Translation& Environment::add_translation(utl::string_view source, const std::vector<std::string>& target) {
   map_->emplace(source, Translation{target});
-  return map_->at(source);
+  return map_->at(std::string{source});
 }
 
 void Environment::push_map(TranslationMap& map) {

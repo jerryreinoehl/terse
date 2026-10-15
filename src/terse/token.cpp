@@ -1,4 +1,5 @@
 #include "token.hpp"
+#include <utl/string_view.hpp>
 
 using terse::TokenType;
 

@@ -3,7 +3,7 @@
 using terse::ParseError;
 using terse::TokenType;
 
-ParseError::ParseError(int line, int col, std::string message)
+ParseError::ParseError(int line, int col, utl::string_view message)
   : line_{line}, col_{col}, message_{message} {}
 
 unexpected<ParseError> terse::invalid_map_source_error(int line, int col) {
