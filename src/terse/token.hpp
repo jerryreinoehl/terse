@@ -59,7 +59,7 @@ namespace terse {
 
       static TokenType token_type;
 
-      Value value;
+      Value value{TokenType::None};
 
       TokenType(token_type_t);
   };
