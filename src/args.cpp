@@ -1,9 +1,9 @@
 #include "args.hpp"
 
-#include <string_view>
+#include <utl/string_view.hpp>
 
 Args::Args(int argc, char **argv) {
-  std::string_view arg;
+  utl::string_view arg;
   bool end_of_opts{false};
 
   for (char **it = &argv[1], **end = &argv[argc]; it != end; ++it) {
@@ -25,7 +25,7 @@ Args::Args(int argc, char **argv) {
   }
 }
 
-std::vector<std::string> Args::command() const noexcept {
+const std::vector<std::string>& Args::command() const noexcept {
   return command_;
 }
 

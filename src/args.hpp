@@ -7,7 +7,7 @@ class Args {
   public:
     Args(int argc, char **argv);
 
-    std::vector<std::string> command() const noexcept;
+    const std::vector<std::string>& command() const noexcept;
     bool dry_run() const noexcept;
     bool verbose() const noexcept;
 
