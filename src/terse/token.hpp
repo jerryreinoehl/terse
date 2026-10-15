@@ -7,6 +7,8 @@
 #include <vector>
 #include <cassert>
 
+#include <utl/type_traits.hpp>
+
 namespace terse {
 
   class TokenType {
@@ -89,10 +91,26 @@ namespace terse {
       //   Token token = StringToken{...};
       //   std::cout << token.as<StringToken>().value() << "\n";
       template <typename T>
-      const T& as() const;
+      utl::enable_if_t<!utl::is_pointer_v<T>, const T&>
+      as() const;
 
       template <typename T>
-      T& as();
+      utl::enable_if_t<!utl::is_pointer_v<T>, T&>
+      as();
+
+      // Casts this token to a pointer to token class `T`.
+      // Asserts that this token's `type()` matches the `type()` of `T`.
+      //   e.g.
+      //   const Token *token = new StringToken{...};
+      //   std::cout << token->as<const StringToken*>()->value() << '\n';
+      //   delete token->as<const StringToken*>();
+      template <typename T>
+      utl::enable_if_t<utl::is_pointer_v<T>, T>
+      as() const;
+
+      template <typename T>
+      utl::enable_if_t<utl::is_pointer_v<T>, T>
+      as();
 
     private:
       int line_;
@@ -192,15 +210,35 @@ inline bool terse::Token::is() const noexcept {
 }
 
 template <typename T>
-inline const T& terse::Token::as() const {
-  assert(type_ == token_traits<T>::type);
+inline
+utl::enable_if_t<!utl::is_pointer_v<T>, const T&>
+terse::Token::as() const {
+  assert(type_ == token_traits<utl::base_type_t<T>>::type);
   return static_cast<const T&>(*this);
 }
 
 template <typename T>
-inline T& terse::Token::as() {
-  assert(type_ == token_traits<T>::type);
+inline
+utl::enable_if_t<!utl::is_pointer_v<T>, T&>
+terse::Token::as() {
+  assert(type_ == token_traits<utl::base_type_t<T>>::type);
   return static_cast<T&>(*this);
+}
+
+template <typename T>
+inline
+utl::enable_if_t<utl::is_pointer_v<T>, T>
+terse::Token::as() const {
+  assert(type_ == token_traits<utl::base_type_t<T>>::type);
+  return static_cast<const T>(this);
+}
+
+template <typename T>
+inline
+utl::enable_if_t<utl::is_pointer_v<T>, T>
+terse::Token::as() {
+  assert(type_ == token_traits<utl::base_type_t<T>>::type);
+  return static_cast<T>(this);
 }
 
 //*****************************************************************************
