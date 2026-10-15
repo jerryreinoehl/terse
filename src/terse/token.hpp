@@ -139,6 +139,11 @@ namespace terse {
       std::string error_{};
   };
 
+  // Deleter to probably delete a `Token` based on its `TokenType`.
+  class TokenDeleter {
+    void operator()(const Token *p);
+  };
+
   template <typename T>
   struct token_traits;
 
@@ -261,4 +266,20 @@ inline terse::ErrorToken::ErrorToken(const std::string& error, int line, int col
 
 inline std::string terse::ErrorToken::error() const noexcept {
   return error_;
+}
+
+//*****************************************************************************
+// class TokenDeleter
+//*****************************************************************************
+
+inline void terse::TokenDeleter::operator()(const Token *p) {
+  switch (p->type()) {
+    case TokenType::String:
+      delete p->as<const StringToken*>();
+      break;
+
+    default:
+      delete p;
+      break;
+  }
 }
