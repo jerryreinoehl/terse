@@ -3,7 +3,6 @@
 #include "expected.hpp"
 #include "token.hpp"
 
-#include <memory>
 #include <string>
 
 namespace terse {
@@ -23,7 +22,7 @@ namespace terse {
 
   template <typename T>
   using ParseResult = expected<T, ParseError>;
-  using TokenResult = ParseResult<std::unique_ptr<const Token>>;
+  using TokenResult = ParseResult<TokenPtr>;
 
   unexpected<ParseError> invalid_map_source_error(int line, int col);
   unexpected<ParseError> unexpected_token_error(int line, int col, TokenType expected, TokenType actual);

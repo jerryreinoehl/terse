@@ -148,6 +148,12 @@ namespace terse {
   using TokenPtr = std::unique_ptr<Token, TokenDeleter>;
   using ConstTokenPtr = std::unique_ptr<const Token, TokenDeleter>;
 
+  template <
+    typename... Args,
+    utl::enable_if_t<utl::is_constructible_v<Token, Args...>, int> = 1
+  >
+  TokenPtr make_token_ptr(Args... args);
+
   template <typename T>
   struct token_traits;
 
@@ -286,4 +292,16 @@ inline void terse::TokenDeleter::operator()(const Token *p) {
       delete p;
       break;
   }
+}
+
+//*****************************************************************************
+//
+//*****************************************************************************
+
+template <
+  typename... Args,
+  utl::enable_if_t<utl::is_constructible_v<terse::Token, Args...>, int>
+>
+terse::TokenPtr terse::make_token_ptr(Args... args) {
+  return TokenPtr{new Token{std::forward<Args>(args)...}};
 }
