@@ -60,7 +60,12 @@ namespace terse {
       // `aligned-alloc`.
       // The returned size will be a power of two greater than
       // `x` and a multiple of `sizeof(void*)`.
-      constexpr size_t align(size_t x);
+      constexpr size_t align(size_t x) {
+        constexpr size_t max{4096 * 8};
+        size_t pow{sizeof(void*)};
+        for (; pow < x && pow <= max; pow <<= 1);
+        return pow;
+      }
   };
 
 }
@@ -148,11 +153,4 @@ inline void terse::BufferedReader::readmore() {
   if (bytes_read == 0) {
     eof_ = true;
   }
-}
-
-inline constexpr size_t terse::BufferedReader::align(size_t x) {
-  constexpr size_t max{4096 * 8};
-  size_t pow{sizeof(void*)};
-  for (; pow < x && pow <= max; pow <<= 1);
-  return pow;
 }
