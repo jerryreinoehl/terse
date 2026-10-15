@@ -1,11 +1,12 @@
 #pragma once
 
+#include <cassert>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
-#include <cassert>
 
 #include <utl/type_traits.hpp>
 
@@ -143,6 +144,9 @@ namespace terse {
   class TokenDeleter {
     void operator()(const Token *p);
   };
+
+  using TokenPtr = std::unique_ptr<Token, TokenDeleter>;
+  using ConstTokenPtr = std::unique_ptr<const Token, TokenDeleter>;
 
   template <typename T>
   struct token_traits;
