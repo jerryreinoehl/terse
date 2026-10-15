@@ -29,8 +29,8 @@ namespace terse {
       Environment environment_{};
 
       // Holds tokens for `peak`ing and `putback`.
-      std::unique_ptr<const Token> peak_token_{};
-      std::unique_ptr<const Token> putback_token_{};
+      TokenPtr peak_token_{};
+      TokenPtr putback_token_{};
 
       // Current line and col as obtained from last read token.
       int line_{};
@@ -47,7 +47,7 @@ namespace terse {
       TokenResult next_require_type(TokenType type);
 
       // Puts the token `token` back to be returned on the next call to `next`.
-      void putback(std::unique_ptr<const Token> token);
+      void putback(TokenPtr token);
 
       // Returns the next token without consuming it such that a subsequent
       // call to next returns the same token.

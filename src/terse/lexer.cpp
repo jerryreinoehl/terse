@@ -1,6 +1,5 @@
 #include "lexer.hpp"
 
-#include <memory>
 #include <sstream>
 
 using terse::Lexer;
@@ -20,12 +19,12 @@ TokenResult Lexer::next() {
     c = get();
 
     if (c == '\n' || c == ';') {
-      return {std::make_unique<const Token>(TokenType::Newline, line, col)};
+      return Token::make_ptr(TokenType::Newline, line, col);
     } else if (c == EOF) {
-      return {std::make_unique<const Token>(TokenType::Stop, line, col)};
+      return Token::make_ptr(TokenType::Stop, line, col);
     } else if (c == '#') {
       readline();
-      return {std::make_unique<const Token>(TokenType::Newline, line, col)};
+      return Token::make_ptr(TokenType::Newline, line, col);
     } else {
       break;
     }
@@ -55,8 +54,8 @@ TokenResult Lexer::next() {
   TokenType type = TokenType::from_lexeme(lexeme.str());
 
   if (type == TokenType::None) {
-    return {std::make_unique<const StringToken>(lexeme.str(), line, col)};
+    return StringToken::make_ptr(lexeme.str(), line, col);
   } else {
-    return {std::make_unique<const Token>(type, line, col)};
+    return Token::make_ptr(type, line, col);
   }
 }

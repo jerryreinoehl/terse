@@ -54,7 +54,7 @@ TokenResult Parser::next_require_type(TokenType type) {
   return token;
 }
 
-void Parser::putback(std::unique_ptr<const Token> token) {
+void Parser::putback(TokenPtr token) {
   // TODO: Check to ensure `putback_token_` is empty (nullptr).
   putback_token_ = std::move(token);
 }
@@ -114,7 +114,7 @@ ParseResult<Statements> Parser::parse_statements() {
 }
 
 ParseResult<Statement> Parser::parse_statement() {
-  std::unique_ptr<const Token> token = unwrap(next_require_type(TokenType::String));
+  TokenPtr token = unwrap(next_require_type(TokenType::String));
   unwrap(unwrap(peak())->type() == TokenType::Arm, malformed_statement_error(line_, col_));
   putback(std::move(token));
 
