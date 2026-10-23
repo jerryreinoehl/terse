@@ -20,6 +20,7 @@ TokenType::TokenType(TokenType::token_type_t) {
   TokenType::add(TokenType::RightParen, "RightParen", ")");
   TokenType::add(TokenType::Stop, "Stop");
   TokenType::add(TokenType::String, "String");
+  TokenType::add(TokenType::Symbol, "Symbol");
 }
 
 std::ostream& terse::operator<<(std::ostream& out, TokenType::Value type) {

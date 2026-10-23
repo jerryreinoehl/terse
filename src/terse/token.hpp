@@ -26,6 +26,7 @@ namespace terse {
         RightParen,
         Stop,
         String,
+        Symbol,
         None, // Keep this last as it is used for TokenType element count.
       };
 
