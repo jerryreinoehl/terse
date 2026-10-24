@@ -157,6 +157,16 @@ namespace terse {
       std::string error_{};
   };
 
+  class SymbolToken : public Token {
+    public:
+      SymbolToken(utl::string_view symbol, int line, int col) noexcept;
+
+      utl::string_view symbol() const noexcept;
+
+    private:
+      std::string symbol_{};
+  };
+
   // Deleter to probably delete a `Token` based on its `TokenType`.
   struct TokenDeleter {
     void operator()(const Token *p);
@@ -292,6 +302,17 @@ inline terse::ErrorToken::ErrorToken(utl::string_view error, int line, int col) 
 
 inline utl::string_view terse::ErrorToken::error() const noexcept {
   return error_;
+}
+
+//*****************************************************************************
+// class SymbolToken
+//*****************************************************************************
+
+inline terse::SymbolToken::SymbolToken(utl::string_view symbol, int line, int col) noexcept
+  : Token{TokenType::Symbol, line, col}, symbol_{symbol} {}
+
+inline utl::string_view terse::SymbolToken::symbol() const noexcept {
+  return symbol_;
 }
 
 //*****************************************************************************
