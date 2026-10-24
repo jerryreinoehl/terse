@@ -321,12 +321,16 @@ inline utl::string_view terse::SymbolToken::symbol() const noexcept {
 
 inline void terse::TokenDeleter::operator()(const Token *p) {
   switch (p->type()) {
+    case TokenType::Error:
+      delete p->as<const ErrorToken*>();
+      break;
+
     case TokenType::String:
       delete p->as<const StringToken*>();
       break;
 
-    case TokenType::Error:
-      delete p->as<const ErrorToken*>();
+    case TokenType::Symbol:
+      delete p->as<const SymbolToken*>();
       break;
 
     default:
