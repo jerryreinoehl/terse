@@ -304,6 +304,10 @@ inline void terse::TokenDeleter::operator()(const Token *p) {
       delete p->as<const StringToken*>();
       break;
 
+    case TokenType::Error:
+      delete p->as<const ErrorToken*>();
+      break;
+
     default:
       delete p;
       break;
