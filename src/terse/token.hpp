@@ -159,6 +159,10 @@ namespace terse {
 
   class SymbolToken : public Token {
     public:
+      template <typename... Args>
+      utl::enable_if_t<utl::is_constructible_v<SymbolToken, Args...>(), TokenPtr>
+      static make_ptr(Args... args) noexcept;
+
       SymbolToken(utl::string_view symbol, int line, int col) noexcept;
 
       utl::string_view symbol() const noexcept;
@@ -307,6 +311,12 @@ inline utl::string_view terse::ErrorToken::error() const noexcept {
 //*****************************************************************************
 // class SymbolToken
 //*****************************************************************************
+
+template <typename... Args>
+utl::enable_if_t<utl::is_constructible_v<terse::SymbolToken, Args...>(), terse::TokenPtr>
+inline terse::SymbolToken::make_ptr(Args... args) noexcept {
+  return TokenPtr{new SymbolToken{std::forward<Args>(args)...}};
+}
 
 inline terse::SymbolToken::SymbolToken(utl::string_view symbol, int line, int col) noexcept
   : Token{TokenType::Symbol, line, col}, symbol_{symbol} {}
