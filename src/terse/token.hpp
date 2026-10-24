@@ -189,6 +189,11 @@ namespace terse {
     static constexpr TokenType type{TokenType::Error};
   };
 
+  template <>
+  struct token_traits<SymbolToken> {
+    static constexpr TokenType type{TokenType::Symbol};
+  };
+
 }
 
 //*****************************************************************************
