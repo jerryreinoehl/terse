@@ -9,6 +9,8 @@ WordExpression& WordExpression::operator=(WordExpression&& other) noexcept {
   }
 
   words_ = std::move(other.words_);
+
+  return *this;
 }
 
 void WordExpression::add(TokenPtr token) {
