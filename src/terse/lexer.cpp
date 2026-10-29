@@ -59,7 +59,6 @@ TokenResult Lexer::next() {
 
   if (*it == '$') {
     ++it; // Skip "$"
-    std::cout << "Symbol is " << it.view() << '\n';
     return SymbolToken::make_ptr(it.view(), line, col);
   }
 
