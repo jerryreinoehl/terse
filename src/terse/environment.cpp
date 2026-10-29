@@ -58,8 +58,8 @@ void Environment::pop_map() {
   maps_.pop();
 }
 
-std::vector<std::string> Environment::translate(const std::vector<std::string>& args) const noexcept {
-  std::vector<std::string> translated{};
+std::vector<utl::string_view> Environment::translate(const std::vector<std::string>& args) const noexcept {
+  std::vector<utl::string_view> translated{};
   translated.reserve(8);
 
   const TranslationMap *tm = &global_map_;
@@ -69,7 +69,7 @@ std::vector<std::string> Environment::translate(const std::vector<std::string>& 
 
     if (it != tm->end()) {
       for (auto& i : it->second.target()) {
-        translated.push_back(i->as<StringToken>().value().to_string());
+        translated.push_back(i->as<StringToken>().value());
       }
 
       if (it->second.map().size() > 0) {

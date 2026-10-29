@@ -43,7 +43,7 @@ namespace terse {
       void push_map(TranslationMap& map);
       void pop_map();
 
-      std::vector<std::string> translate(const std::vector<std::string>& args) const noexcept;
+      std::vector<utl::string_view> translate(const std::vector<std::string>& args) const noexcept;
 
     private:
       TranslationMap global_map_{};

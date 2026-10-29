@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
   }
   const terse::Environment& environment = **result;
 
-  std::vector<std::string> translated = environment.translate(args.command());
+  std::vector<utl::string_view> translated = environment.translate(args.command());
 
   f.close();
 
@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
   return rc;
 }
 
-int execute(const std::vector<std::string>& args) {
+int execute(const std::vector<utl::string_view>& args) {
   if (args.size() == 0) {
     errno = EINVAL;
     return -EINVAL;
@@ -62,7 +62,7 @@ int execute(const std::vector<std::string>& args) {
   const char **argv = new const char*[args.size() + 1];
 
   for (size_t i = 0; i < args.size(); i++) {
-    argv[i] = args[i].c_str();
+    argv[i] = args[i].data();
   }
   argv[args.size()] = nullptr;
 
