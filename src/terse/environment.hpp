@@ -6,6 +6,8 @@
 #include <vector>
 #include <utl/string_view.hpp>
 
+#include "token.hpp"
+
 namespace terse {
 
   class Translation;
@@ -14,22 +16,21 @@ namespace terse {
 
   class Translation {
     public:
-      explicit Translation(const std::vector<std::string>& target) : target_{target} {}
-      explicit Translation(std::vector<std::string>&& target) : target_{std::move(target)} {}
+      explicit Translation(std::vector<TokenPtr>&& target) : target_{std::move(target)} {}
 
-      Translation(const Translation& other) : target_{other.target_}, map_{other.map_} {}
+      Translation(const Translation& other) = delete;
       Translation(Translation&& other) : target_{std::move(other.target_)}, map_{std::move(other.map_)} {}
 
-      Translation& operator=(const Translation& other);
+      Translation& operator=(const Translation& other) = delete;
       Translation& operator=(Translation&& other);
 
-      const std::vector<std::string>& target() const noexcept;
+      const std::vector<TokenPtr>& target() const noexcept;
 
       const TranslationMap& map() const noexcept;
       TranslationMap& map() noexcept;
 
     private:
-      std::vector<std::string> target_;
+      std::vector<TokenPtr> target_;
       TranslationMap map_{};
   };
 
@@ -38,7 +39,7 @@ namespace terse {
       const TranslationMap& map() const noexcept;
       TranslationMap& map() noexcept;
 
-      Translation& add_translation(utl::string_view source, const std::vector<std::string>& target);
+      Translation& add_translation(TokenPtr source, std::vector<TokenPtr>&& target);
       void push_map(TranslationMap& map);
       void pop_map();
 

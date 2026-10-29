@@ -6,8 +6,6 @@
 #include "lexer.hpp"
 #include "token.hpp"
 
-#include <memory>
-
 namespace terse {
 
   class Parser {
@@ -58,7 +56,7 @@ namespace terse {
 
       ParseResult<Statements> parse_statements();
       ParseResult<Statement> parse_statement();
-      ParseResult<MapStatement> parse_map_statement();
+      ParseResult<Statement> parse_map_statement();
       ParseResult<WordExpression> parse_word_expression();
   };
 

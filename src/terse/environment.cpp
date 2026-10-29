@@ -8,17 +8,6 @@ using terse::TranslationMap;
 // struct Translation
 //*****************************************************************************
 
-Translation& Translation::operator=(const Translation& other) {
-  if (this == &other) {
-    return *this;
-  }
-
-  target_ = other.target_;
-  map_ = other.map_;
-
-  return *this;
-}
-
 Translation& Translation::operator=(Translation&& other) {
   if (this == &other) {
     return *this;
@@ -30,7 +19,7 @@ Translation& Translation::operator=(Translation&& other) {
   return *this;
 }
 
-const std::vector<std::string>& Translation::target() const noexcept {
+const std::vector<terse::TokenPtr>& Translation::target() const noexcept {
   return target_;
 }
 
@@ -54,9 +43,9 @@ TranslationMap& Environment::map() noexcept {
   return global_map_;
 }
 
-Translation& Environment::add_translation(utl::string_view source, const std::vector<std::string>& target) {
-  map_->emplace(source, Translation{target});
-  return map_->at(std::string{source});
+Translation& Environment::add_translation(TokenPtr source, std::vector<TokenPtr>&& target) {
+  map_->emplace(source->as<StringToken>().value(), Translation{std::move(target)});
+  return map_->at(source->as<StringToken>().value().to_string());
 }
 
 void Environment::push_map(TranslationMap& map) {
@@ -80,7 +69,7 @@ std::vector<std::string> Environment::translate(const std::vector<std::string>& 
 
     if (it != tm->end()) {
       for (auto& i : it->second.target()) {
-        translated.push_back(i);
+        translated.push_back(i->as<StringToken>().value().to_string());
         if (it->second.map().size() > 0) {
           tm = &it->second.map();
         }

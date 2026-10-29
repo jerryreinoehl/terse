@@ -1,6 +1,7 @@
 #include "lexer.hpp"
 
 #include <sstream>
+#include <utl/char_iterator.hpp>
 
 using terse::Lexer;
 using terse::Token;
@@ -9,6 +10,8 @@ using terse::TokenResult;
 TokenResult Lexer::next() {
   char c;
   std::stringstream lexeme{};
+  std::string lexeme_str{};
+  utl::const_char_iterator it{};
   int line, col;
 
   skip_whitespace();
@@ -51,10 +54,19 @@ TokenResult Lexer::next() {
 
   putback();
 
-  TokenType type = TokenType::from_lexeme(lexeme.str());
+  lexeme_str = lexeme.str();
+  it = utl::const_char_iterator{lexeme_str.c_str()};
+
+  if (*it == '$') {
+    ++it; // Skip "$"
+    std::cout << "Symbol is " << it.view() << '\n';
+    return SymbolToken::make_ptr(it.view(), line, col);
+  }
+
+  TokenType type = TokenType::from_lexeme(it.view());
 
   if (type == TokenType::None) {
-    return StringToken::make_ptr(lexeme.str(), line, col);
+    return StringToken::make_ptr(it.view(), line, col);
   } else {
     return Token::make_ptr(type, line, col);
   }

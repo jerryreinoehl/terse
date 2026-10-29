@@ -9,7 +9,6 @@ namespace terse {
 
   class Statement;
   class Statements;
-  class MapStatement;
   class Expression;
   class WordExpression;
 
@@ -53,17 +52,5 @@ namespace terse {
 
     private:
       std::vector<Statement> statements_{};
-  };
-
-  class MapStatement : public Statement {
-    public:
-      MapStatement(WordExpression source, WordExpression target, Statements statements)
-        : source{source}, target{target}, statements{statements} {}
-
-      WordExpression source{};
-      WordExpression target{};
-      Statements statements{};
-
-    private:
   };
 }

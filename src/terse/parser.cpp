@@ -2,12 +2,11 @@
 #include "unwrap.hpp"
 
 using terse::Environment;
-using terse::MapStatement;
+//using terse::MapStatement;
 using terse::ParseResult;
 using terse::Parser;
 using terse::Statement;
 using terse::Statements;
-using terse::StringToken;
 using terse::Token;
 using terse::TokenResult;
 using terse::WordExpression;
@@ -121,7 +120,7 @@ ParseResult<Statement> Parser::parse_statement() {
   return unwrap(parse_map_statement());
 }
 
-ParseResult<MapStatement> Parser::parse_map_statement() {
+ParseResult<Statement> Parser::parse_map_statement() {
   WordExpression source;
   WordExpression target;
   Statements statements;
@@ -129,12 +128,15 @@ ParseResult<MapStatement> Parser::parse_map_statement() {
   source = unwrap(parse_word_expression());
   // `source` must contain one and only one word to be valid.
   unwrap(source.size() == 1, invalid_map_source_error(line_, col_));
+  // `source` must be a `TokenType::String` type.
+  unwrap(source.first().type() == TokenType::String, invalid_map_source_error(line_, col_));
+  // TODO: Add two different errors for source size and source type. ^^^
 
   unwrap(next_require_type(TokenType::Arm));
 
   target = unwrap(parse_word_expression());
 
-  Translation& translation = environment_.add_translation(source.first(), target.words());
+  Translation& translation = environment_.add_translation(std::move(source).first(), std::move(target).words());
 
   if (unwrap(peak_ignore_newlines())->type() == TokenType::LeftBrace) {
     unwrap(next_require_type(TokenType::LeftBrace));
@@ -150,18 +152,24 @@ ParseResult<MapStatement> Parser::parse_map_statement() {
     environment_.pop_map();
   }
 
-  return MapStatement{source, target, statements};
+  return Statement{};
 }
 
 ParseResult<WordExpression> Parser::parse_word_expression() {
   WordExpression expression;
+  bool in_word_expr{true};
 
   do {
-    if (unwrap(peak())->type() != TokenType::String) {
-      break;
+    switch (unwrap(peak())->type()) {
+      case TokenType::String:
+      case TokenType::Symbol:
+        expression.add(unwrap(next()));
+        break;
+      default:
+        in_word_expr = false;
+        break;
     }
-    expression.add(unwrap(next())->as<StringToken>().value());
-  } while (true);
+  } while (in_word_expr);
 
   return expression;
 }
