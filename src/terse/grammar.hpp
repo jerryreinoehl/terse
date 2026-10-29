@@ -1,8 +1,9 @@
 #pragma once
 
-#include <string>
 #include <vector>
 #include <utl/string_view.hpp>
+
+#include "token.hpp"
 
 namespace terse {
 
@@ -19,17 +20,19 @@ namespace terse {
 
   class WordExpression : public Expression {
     public:
-      void add(utl::string_view word);
+      void add(TokenPtr token);
       size_t size() const noexcept;
 
-      const std::vector<std::string>& words() const noexcept;
+      const std::vector<TokenPtr>& words() const& noexcept;
+      std::vector<TokenPtr> words() && noexcept;
 
-      utl::string_view operator[](size_t index) const;
+      const Token& operator[](size_t index) const;
 
-      utl::string_view first() const noexcept;
+      const Token& first() const& noexcept;
+      TokenPtr first() && noexcept;
 
     private:
-      std::vector<std::string> words_{};
+      std::vector<TokenPtr> words_{};
   };
 
   class Statement {
