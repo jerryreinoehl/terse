@@ -70,9 +70,10 @@ std::vector<std::string> Environment::translate(const std::vector<std::string>& 
     if (it != tm->end()) {
       for (auto& i : it->second.target()) {
         translated.push_back(i->as<StringToken>().value().to_string());
-        if (it->second.map().size() > 0) {
-          tm = &it->second.map();
-        }
+      }
+
+      if (it->second.map().size() > 0) {
+        tm = &it->second.map();
       }
     } else {
       translated.push_back(arg);
