@@ -20,6 +20,13 @@ namespace terse {
 
   class WordExpression : public Expression {
     public:
+      WordExpression() : words_{} {}
+      WordExpression(const WordExpression&) = delete;
+      WordExpression(WordExpression&& other) : words_{std::move(other.words_)} {}
+
+      WordExpression& operator=(const WordExpression&) = delete;
+      WordExpression& operator=(WordExpression&& other) noexcept;
+
       void add(TokenPtr token);
       size_t size() const noexcept;
 

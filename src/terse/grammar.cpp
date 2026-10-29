@@ -3,6 +3,14 @@
 using terse::WordExpression;
 using terse::Statements;
 
+WordExpression& WordExpression::operator=(WordExpression&& other) noexcept {
+  if (this == &other) {
+    return *this;
+  }
+
+  words_ = std::move(other.words_);
+}
+
 void WordExpression::add(TokenPtr token) {
   words_.push_back(std::move(token));
 }
