@@ -62,11 +62,18 @@ void Environment::add_symbol(utl::string_view symbol, utl::string_view value) {
   symbol_map_.emplace(symbol, value);
 }
 
-utl::string_view Environment::get_symbol(utl::string_view symbol) const {
-  return symbol_map_.at(symbol.to_string());
+terse::ParseResult<utl::string_view> Environment::get_symbol(const SymbolToken& symbol) const {
+  auto it = symbol_map_.find(symbol.symbol().to_string());
+
+  if (it == symbol_map_.end()) {
+    return symbol_not_found_error(symbol.line(), symbol.col(), symbol.symbol());
+  }
+
+  return it->second;
 }
 
 std::vector<utl::string_view> Environment::translate(const std::vector<std::string>& args) const noexcept {
+  ParseResult<utl::string_view> symbol_result;
   std::vector<utl::string_view> translated{};
   translated.reserve(8);
 
@@ -81,9 +88,18 @@ std::vector<utl::string_view> Environment::translate(const std::vector<std::stri
           case TokenType::String:
             translated.push_back(i->as<StringToken>().value());
             break;
+
           case TokenType::Symbol:
-            translated.push_back(get_symbol(i->as<SymbolToken>().symbol()));
+            symbol_result = get_symbol(i->as<SymbolToken>());
+
+            if (!symbol_result) {
+              std::cerr << symbol_result.error().to_string() << '\n';
+              continue;
+            }
+
+            translated.push_back(*symbol_result);
             break;
+
           default:
             break;
         }

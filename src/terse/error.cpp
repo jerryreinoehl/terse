@@ -22,3 +22,7 @@ unexpected<ParseError> terse::unexpected_token_error(int line, int col, TokenTyp
 unexpected<ParseError> terse::malformed_statement_error(int line, int col) {
   return unexpected<ParseError>{line, col, "Malformed statement"};
 }
+
+unexpected<ParseError> terse::symbol_not_found_error(int line, int col, utl::string_view symbol) {
+  return unexpected<ParseError>{line, col, "Symbol `" + symbol.to_string() + "` not found"};
+}
