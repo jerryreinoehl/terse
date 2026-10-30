@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
   f.close();
 
   if (args.verbose()) {
-    std::cout << "\e[35m" << translated << "\e[0m\n";
+    std::cout << "\e[90m" << translated << "\e[0m\n";
   }
 
   int rc;
