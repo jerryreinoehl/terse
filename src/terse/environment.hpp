@@ -13,6 +13,7 @@ namespace terse {
   class Translation;
 
   using TranslationMap = std::map<std::string, Translation>;
+  using SymbolMap = std::map<std::string, std::string>;
 
   class Translation {
     public:
@@ -43,12 +44,15 @@ namespace terse {
       void push_map(TranslationMap& map);
       void pop_map();
 
+      void add_symbol(utl::string_view symbol, utl::string_view value);
+
       std::vector<utl::string_view> translate(const std::vector<std::string>& args) const noexcept;
 
     private:
       TranslationMap global_map_{};
       TranslationMap *map_{&global_map_};
       std::stack<TranslationMap*> maps_{};
+      SymbolMap symbol_map_{};
   };
 
 }

@@ -58,6 +58,10 @@ void Environment::pop_map() {
   maps_.pop();
 }
 
+void Environment::add_symbol(utl::string_view symbol, utl::string_view value) {
+  symbol_map_.emplace(symbol, value);
+}
+
 std::vector<utl::string_view> Environment::translate(const std::vector<std::string>& args) const noexcept {
   std::vector<utl::string_view> translated{};
   translated.reserve(8);
