@@ -14,7 +14,7 @@ namespace terse {
 
       // Parse the `stream` and return a `ParseResult` containing a pointer to
       // the constructed `Environment`.
-      ParseResult<const Environment*> parse();
+      ParseResult<Environment*> parse();
 
       // Returns a const reference to the current `Environment`.
       const Environment& environment() const noexcept;

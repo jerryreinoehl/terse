@@ -11,7 +11,7 @@ using terse::Token;
 using terse::TokenResult;
 using terse::WordExpression;
 
-ParseResult<const Environment*> Parser::parse() {
+ParseResult<Environment*> Parser::parse() {
   unwrap(parse_statements());
   return &environment_;
 }

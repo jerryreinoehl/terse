@@ -24,12 +24,12 @@ int main(int argc, char **argv) {
   Args args{argc, argv};
 
   terse::Parser parser{f};
-  terse::ParseResult<const terse::Environment*> result = parser.parse();
+  terse::ParseResult<terse::Environment*> result = parser.parse();
   if (!result) {
     std::cerr << std::move(result).error().to_string() << '\n';
     return 1;
   }
-  const terse::Environment& environment = **result;
+  terse::Environment& environment = **result;
 
   std::vector<utl::string_view> translated = environment.translate(args.command());
 
