@@ -73,24 +73,37 @@ terse::ParseResult<utl::string_view> Environment::get_symbol(const SymbolToken& 
 }
 
 std::vector<utl::string_view> Environment::translate(const std::vector<std::string>& args) const noexcept {
+  SymbolToken symbol_token{};
   ParseResult<utl::string_view> symbol_result;
+
   std::vector<utl::string_view> translated{};
   translated.reserve(8);
 
   const TranslationMap *tm = &global_map_;
 
-  for (auto& arg : args) {
+  for (size_t i{}; i < args.size(); ++i) {
+    const auto& arg = args[i];
     auto it = tm->find(arg);
 
     if (it != tm->end()) {
-      for (auto& i : it->second.target()) {
-        switch (i->type()) {
+      for (auto& token : it->second.target()) {
+        switch (token->type()) {
           case TokenType::String:
-            translated.push_back(i->as<StringToken>().value());
+            translated.push_back(token->as<StringToken>().value());
             break;
 
           case TokenType::Symbol:
-            symbol_result = get_symbol(i->as<SymbolToken>());
+            symbol_token = token->as<SymbolToken>();
+
+            if (symbol_token.symbol() == "<") {
+              ++i;
+              if (i < args.size()) {
+                translated.push_back(args[i]);
+              }
+              continue;
+            }
+
+            symbol_result = get_symbol(symbol_token);
 
             if (!symbol_result) {
               std::cerr << symbol_result.error().to_string() << '\n';

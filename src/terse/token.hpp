@@ -81,6 +81,7 @@ namespace terse {
       utl::enable_if_t<utl::is_nothrow_constructible_v<Token, Args...>(), TokenPtr>
       static make_ptr(Args... args) noexcept;
 
+      Token() noexcept;
       Token(TokenType type, int line, int col) noexcept;
 
       // This token's type.
@@ -127,9 +128,9 @@ namespace terse {
       as();
 
     private:
-      int line_;
-      int col_;
-      TokenType type_;
+      int line_{};
+      int col_{};
+      TokenType type_{};
   };
 
 
@@ -164,6 +165,7 @@ namespace terse {
       utl::enable_if_t<utl::is_constructible_v<SymbolToken, Args...>(), TokenPtr>
       static make_ptr(Args... args) noexcept;
 
+      SymbolToken() noexcept;
       SymbolToken(utl::string_view symbol, int line, int col) noexcept;
 
       utl::string_view symbol() const noexcept;
@@ -237,6 +239,8 @@ utl::enable_if_t<utl::is_nothrow_constructible_v<terse::Token, Args...>(), terse
 inline terse::Token::make_ptr(Args... args) noexcept {
   return TokenPtr{new Token{std::forward<Args>(args)...}};
 }
+
+inline terse::Token::Token() noexcept : line_{}, col_{}, type_{TokenType::None} {}
 
 inline terse::Token::Token(TokenType type, int line, int col) noexcept
   : line_{line}, col_{col}, type_{type} {}
@@ -323,6 +327,8 @@ utl::enable_if_t<utl::is_constructible_v<terse::SymbolToken, Args...>(), terse::
 inline terse::SymbolToken::make_ptr(Args... args) noexcept {
   return TokenPtr{new SymbolToken{std::forward<Args>(args)...}};
 }
+
+inline terse::SymbolToken::SymbolToken() noexcept : Token{}, symbol_{} {}
 
 inline terse::SymbolToken::SymbolToken(utl::string_view symbol, int line, int col) noexcept
   : Token{TokenType::Symbol, line, col}, symbol_{symbol} {}
