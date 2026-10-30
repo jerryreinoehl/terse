@@ -46,6 +46,8 @@ namespace terse {
 
       void add_symbol(utl::string_view symbol, utl::string_view value);
 
+      utl::string_view get_symbol(utl::string_view symbol) const ;
+
       std::vector<utl::string_view> translate(const std::vector<std::string>& args) const noexcept;
 
     private:

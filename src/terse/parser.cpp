@@ -159,10 +159,12 @@ ParseResult<Statement> Parser::parse_map_statement() {
 }
 
 ParseResult<Statement> Parser::parse_assignment_statement() {
-  std::cout << "In parse_assignment_statement\n";
-  std::cout << unwrap(next_require_type(TokenType::Symbol))->as<SymbolToken>().symbol() << " is ";
+  auto symbol = unwrap(next_require_type(TokenType::Symbol));
   unwrap(next_require_type(TokenType::Assign));
-  std::cout << unwrap(next_require_type(TokenType::String))->as<StringToken>().value() << '\n';
+  auto value = unwrap(next_require_type(TokenType::String));
+
+  environment_.add_symbol(symbol->as<SymbolToken>().symbol(), value->as<StringToken>().value());
+
   return Statement{};
 }
 

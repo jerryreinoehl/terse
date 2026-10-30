@@ -62,6 +62,10 @@ void Environment::add_symbol(utl::string_view symbol, utl::string_view value) {
   symbol_map_.emplace(symbol, value);
 }
 
+utl::string_view Environment::get_symbol(utl::string_view symbol) const {
+  return symbol_map_.at(symbol.to_string());
+}
+
 std::vector<utl::string_view> Environment::translate(const std::vector<std::string>& args) const noexcept {
   std::vector<utl::string_view> translated{};
   translated.reserve(8);
@@ -73,7 +77,16 @@ std::vector<utl::string_view> Environment::translate(const std::vector<std::stri
 
     if (it != tm->end()) {
       for (auto& i : it->second.target()) {
-        translated.push_back(i->as<StringToken>().value());
+        switch (i->type()) {
+          case TokenType::String:
+            translated.push_back(i->as<StringToken>().value());
+            break;
+          case TokenType::Symbol:
+            translated.push_back(get_symbol(i->as<SymbolToken>().symbol()));
+            break;
+          default:
+            break;
+        }
       }
 
       if (it->second.map().size() > 0) {
