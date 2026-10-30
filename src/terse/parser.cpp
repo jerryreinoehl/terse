@@ -113,11 +113,14 @@ ParseResult<Statements> Parser::parse_statements() {
 }
 
 ParseResult<Statement> Parser::parse_statement() {
-  TokenPtr token = unwrap(next_require_type(TokenType::String));
-  unwrap(unwrap(peak())->type() == TokenType::Arm, malformed_statement_error(line_, col_));
-  putback(std::move(token));
-
-  return unwrap(parse_map_statement());
+  switch (unwrap(peak_ignore_newlines())->type()) {
+    case TokenType::String:
+      return unwrap(parse_map_statement());
+    case TokenType::Symbol:
+      return unwrap(parse_assignment_statement());
+    default:
+      return malformed_statement_error(line_, col_);
+  }
 }
 
 ParseResult<Statement> Parser::parse_map_statement() {
@@ -152,6 +155,14 @@ ParseResult<Statement> Parser::parse_map_statement() {
     environment_.pop_map();
   }
 
+  return Statement{};
+}
+
+ParseResult<Statement> Parser::parse_assignment_statement() {
+  std::cout << "In parse_assignment_statement\n";
+  std::cout << unwrap(next_require_type(TokenType::Symbol))->as<SymbolToken>().symbol() << " is ";
+  unwrap(next_require_type(TokenType::Assign));
+  std::cout << unwrap(next_require_type(TokenType::String))->as<StringToken>().value() << '\n';
   return Statement{};
 }
 
