@@ -39,7 +39,7 @@ TokenResult Lexer::next() {
       while ((c = get()) != '"') {
         if (is_end_of_line(c)) {
           putback();
-          return unexpected<ParseError>{line, col, "Unterminated string"};
+          return utl::unexpected<ParseError>{line, col, "Unterminated string"};
         }
         lexeme << c;
       }

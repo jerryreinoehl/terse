@@ -1,9 +1,9 @@
 #pragma once
 
-#include "expected.hpp"
 #include "token.hpp"
 
 #include <string>
+#include <utl/expected.hpp>
 #include <utl/string_view.hpp>
 
 namespace terse {
@@ -22,12 +22,12 @@ namespace terse {
   };
 
   template <typename T>
-  using ParseResult = expected<T, ParseError>;
+  using ParseResult = utl::expected<T, ParseError>;
   using TokenResult = ParseResult<TokenPtr>;
 
-  unexpected<ParseError> invalid_map_source_error(int line, int col);
-  unexpected<ParseError> unexpected_token_error(int line, int col, TokenType expected, TokenType actual);
-  unexpected<ParseError> malformed_statement_error(int line, int col);
+  utl::unexpected<ParseError> invalid_map_source_error(int line, int col);
+  utl::unexpected<ParseError> unexpected_token_error(int line, int col, TokenType expected, TokenType actual);
+  utl::unexpected<ParseError> malformed_statement_error(int line, int col);
 
-  unexpected<ParseError> symbol_not_found_error(int line, int col, utl::string_view symbol);
+  utl::unexpected<ParseError> symbol_not_found_error(int line, int col, utl::string_view symbol);
 }
